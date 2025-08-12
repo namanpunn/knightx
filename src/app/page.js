@@ -20,7 +20,7 @@ export default function Home() {
         <Banner />
         <Banner2 />
       </Box>
-      <Box>
+      <Box id="pricing">
         <PricingComponent />
       </Box>
     </>

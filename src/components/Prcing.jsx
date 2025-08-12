@@ -225,7 +225,7 @@ const PremiumGymPricing = () => {
         `,
         py: { xs: 4, md: 6 }
       }}>
-        <Box sx={{ mx: '40px' }}>
+        <Box sx={{ }}>
           {/* Header */}
           <Fade in={isVisible} timeout={600}>
             <Box textAlign="center" mb={6}>
@@ -259,7 +259,7 @@ const PremiumGymPricing = () => {
             </Box>
           </Fade>
 
-          <Grid container spacing={4}>
+          <Grid container spacing={4} sx={{ display: 'flex', justifyContent: 'center',}}>
             {/* Pricing Cards */}
             <Grid item xs={12} md={8}>
               <Grid container spacing={3}>
