@@ -60,7 +60,8 @@ const HeroSection = styled(Box)(({ theme }) => ({
   `,
   display: 'flex',
   alignItems: 'center',
-  paddingTop: theme.spacing(10), // Account for fixed navbar
+  paddingTop: theme.spacing(10),
+  paddingLeft: theme.spacing(2), // Account for fixed navbar
 }));
 
 const ContentContainer = styled(Container)(({ theme }) => ({
@@ -318,7 +319,7 @@ export default function Hero() {
                   Start Your Journey
                 </PrimaryCTA>
 
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                {/* <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                   <PlayButton>
                     <PlayArrowIcon />
                   </PlayButton>
@@ -329,7 +330,7 @@ export default function Hero() {
                   }}>
                     Watch Success Stories
                   </Typography>
-                </Box>
+                </Box> */}
               </Box>
 
             
@@ -357,7 +358,7 @@ export default function Hero() {
                 <Box
                   sx={{
                     position: 'absolute',
-                    top:"-400px",
+                    top:"-370px",
                     left: '-400px',
                     width: { xs: '70%', md: '65%' },
                     height: '90%',
@@ -383,7 +384,7 @@ export default function Hero() {
       </ContentContainer>
 
       {/* Enhanced Bottom Wave */}
-      <Box sx={{ position: 'absolute',  bottom: -5, zIndex: 2,width: '1200px' }}>
+      <Box sx={{ position: 'absolute',  bottom: -5, zIndex: 2,width: '1200px' , left:0}}>
         <svg 
           viewBox="0 0 1440 120" 
           xmlns="http://www.w3.org/2000/svg" 

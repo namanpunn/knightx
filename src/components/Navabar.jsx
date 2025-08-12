@@ -21,13 +21,13 @@ import { styled, alpha } from "@mui/material/styles";
 
 const navItems = [
   "/",
-  "/classes",
-  "/trainers",
-  "/review",
-  "/pricing",
-  "/blog",
+  "#why",
+  "#pricing",
+  "#gallery",
+  "#pricing",
+  "#testimonial",
 ];
-const navLabels = ["Home", "Classes", "Trainers", "Reviews", "Pricing", "Blog"];
+const navLabels = ["Home", "Why Knightx", "Pricing", "Gallery", "Testimonial"];
 
 // Styled components for premium look
 const StyledAppBar = styled(AppBar)(({ theme, scrolled }) => ({
@@ -234,9 +234,10 @@ export default function Navbar() {
                       fontWeight: 800,
                       fontSize: { xs: '1.5rem', md: '1.75rem' },
                       letterSpacing: '-0.02em',
+                      ml:'8px'
                     }}
                   >
-                    GymKnightx
+                    Knightx
                   </Typography>
                 </Box>
               </Link>

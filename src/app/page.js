@@ -2,6 +2,8 @@ import Navbar from "@/components/Navabar";
 import Hero from "@/components/Hero";
 import { Box } from "@mui/material";
 import WhyChoose from "@/components/WhyChoose";
+import Banner from "@/components/Banner"; 
+import Banner2 from "@/components/Banner2";
 export default function Home() {
   return (
     <>
@@ -9,7 +11,13 @@ export default function Home() {
       <Box sx={{ mt: 8 }}>
         <Hero />
       </Box>
-      <WhyChoose />
+      <Box id="why">
+        <WhyChoose />
+      </Box>
+      <Box sx={{position:'relative', mt:12}}>
+        <Banner />
+        <Banner2 />
+      </Box>
     </>
   );
 }
