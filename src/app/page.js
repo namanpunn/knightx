@@ -5,6 +5,9 @@ import WhyChoose from "@/components/WhyChoose";
 import Banner from "@/components/Banner"; 
 import Banner2 from "@/components/Banner2";
 import PricingComponent from "@/components/Prcing";
+import PremiumGymGallery from "@/components/gallery";
+import PremiumGymTestimonials from "@/components/testimonial";
+import PremiumGymFooter from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -23,6 +26,13 @@ export default function Home() {
       <Box id="pricing">
         <PricingComponent />
       </Box>
+      <Box id="gallery">
+        <PremiumGymGallery />
+      </Box>
+      <Box id="testimonials">
+        <PremiumGymTestimonials />
+      </Box>
+      <PremiumGymFooter />
     </>
   );
 }

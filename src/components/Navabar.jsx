@@ -18,7 +18,7 @@ import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { styled, alpha } from "@mui/material/styles";
-
+import Image from "next/image";
 const navItems = [
   "/",
   "#why",
@@ -223,9 +223,9 @@ export default function Navbar() {
                     color: "inherit",
                   }}
                 >
-                  <LogoBox>
-                    <FitnessCenterIcon sx={{ color: '#000', fontSize: 20 }} />
-                  </LogoBox>
+
+                    <Image src="/images/logo.jpg" alt="Gym logo" height={50} width={50} style={{borderRadius: '50%'}}/>
+        
 
                   <Typography 
                     variant="h5" 
