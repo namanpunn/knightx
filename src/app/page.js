@@ -4,6 +4,8 @@ import { Box } from "@mui/material";
 import WhyChoose from "@/components/WhyChoose";
 import Banner from "@/components/Banner"; 
 import Banner2 from "@/components/Banner2";
+import PricingComponent from "@/components/Prcing";
+
 export default function Home() {
   return (
     <>
@@ -17,6 +19,9 @@ export default function Home() {
       <Box sx={{position:'relative', mt:12}}>
         <Banner />
         <Banner2 />
+      </Box>
+      <Box>
+        <PricingComponent />
       </Box>
     </>
   );
