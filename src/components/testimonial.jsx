@@ -283,7 +283,7 @@ const defaultTestimonials = [
     name: 'Dev Patil',
     role: 'Software Engineer',
     avatar: '/images/testi3.jpg',
-    rating: 4.5,
+    rating: 5,
     transformation: '8kg muscle gain',
   },
   {

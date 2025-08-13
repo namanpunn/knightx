@@ -376,7 +376,7 @@ export default function PremiumGymGallery({ images = defaultImages, initialFilte
         ))}
       </FilterContainer>
 
-      <Grid container spacing={{ xs: 3, md: 3 }}>
+      <Grid container spacing={{ xs: 3, md: 3 }} sx={{display: 'flex', justifyContent: 'center'}}>
         {filtered.map((img, i) => (
           <Grid key={img.src + i} item xs={12} sm={6} md={4} lg={3} sx={{ display: 'flex', justifyContent: 'center' }}>
             <FeaturedBadge 
@@ -563,7 +563,7 @@ export default function PremiumGymGallery({ images = defaultImages, initialFilte
                             border: `1px solid ${BORDER_GOLD}`, 
                             bgcolor: 'rgba(255, 215, 0, 0.1)',
                             fontWeight: 600,
-                             display:{xs:'none', md:'block'}
+                             display:{xs:'none', md:'flex'},
                           }} 
                         />
                       ))}
