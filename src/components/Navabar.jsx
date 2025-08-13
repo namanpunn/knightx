@@ -44,7 +44,8 @@ const StyledAppBar = styled(AppBar)(({ theme, scrolled }) => ({
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   minHeight: '72px',
-  padding: theme.spacing(0, 3),
+  display:'flex',
+  justifyContent:'space-between',
   [theme.breakpoints.up('md')]: {
     padding: theme.spacing(0, 6),
     minHeight: '80px',
@@ -278,7 +279,7 @@ export default function Navbar() {
             </Box>
 
             {/* MOBILE MENU BUTTON */}
-            <Box sx={{ display: { xs: "flex", lg: "none" }, ml: '5rem' }}>
+            <Box sx={{ display: { xs: "flex", lg: "none" } }}>
               <IconButton 
                 onClick={handleMenuOpen} 
                 aria-label="open menu" 
