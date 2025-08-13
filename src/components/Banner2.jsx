@@ -37,12 +37,13 @@ const edgeGlow = keyframes`
   50% { opacity: 1; }
 `;
 
-/* --- Premium Black Band Container --- */
-const BandContainer = styled(Box)(() => ({
+/* --- Premium Black Band Container (responsive) --- */
+const BandContainer = styled(Box)(({ theme }) => ({
   position: 'absolute',
   width: '100%',
   height: 80,
   top: -20,
+  left: 0,
   overflow: 'hidden',
   display: 'flex',
   alignItems: 'center',
@@ -77,36 +78,68 @@ const BandContainer = styled(Box)(() => ({
     background: 'linear-gradient(90deg, transparent, #ffd700, #7C3AED, #ffd700, transparent)',
     animation: `${scrollRight} 3s linear infinite, ${edgeGlow} 2s ease-in-out infinite`,
   },
+  [theme.breakpoints.down('md')]: {
+    height: 72,
+    top: -12,
+    transform: 'rotate(3deg)'
+  },
+  [theme.breakpoints.down('sm')]: {
+    position: 'relative',
+    height: 56,
+    top: 0,
+    transform: 'rotate(0deg)',
+    borderRadius: theme.spacing(0.5),
+    margin: theme.spacing(1, 0),
+  }
 }));
 
-/* --- Scrolling lists --- */
-const ScrollingText = styled(Box)(() => ({
+/* --- Scrolling lists (responsive) --- */
+const ScrollingText = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   whiteSpace: 'nowrap',
   animation: `${scrollLeft} 30s linear infinite`,
   gap: 60,
+  paddingLeft: 24,
+  paddingRight: 24,
+  [theme.breakpoints.down('md')]: {
+    gap: 36,
+    animationDuration: '26s',
+  },
+  [theme.breakpoints.down('sm')]: {
+    gap: 20,
+    animationDuration: '20s',
+  }
 }));
 
-const TextItem = styled(Typography)(() => ({
+const TextItem = styled(Typography)(({ theme }) => ({
   color: '#ffffff',
   fontSize: '1.8rem',
   fontWeight: 800,
-  letterSpacing: '0.2em',
+  letterSpacing: '0.16em',
   textTransform: 'uppercase',
   fontFamily: '"Inter", "Roboto", "Arial", sans-serif',
   textShadow: `
     0 2px 4px rgba(0,0,0,0.7),
-    0 0 20px rgba(255,255,255,0.1),
+    0 0 20px rgba(255,255,255,0.06),
     0 4px 8px rgba(0,0,0,0.3)
   `,
   display: 'flex',
   alignItems: 'center',
   gap: 20,
+  [theme.breakpoints.down('md')]: {
+    fontSize: '1.4rem',
+    letterSpacing: '0.12em',
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1.05rem',
+    letterSpacing: '0.08em',
+    fontWeight: 700,
+  }
 }));
 
-const IconWrapper = styled(Box)(() => ({
-  animation: `${pulseGlow} 2s ease-in-out infinite`,
+const IconWrapper = styled(Box)(({ theme }) => ({
+  animation: `${pulseGlow} 2.6s ease-in-out infinite`,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -115,6 +148,12 @@ const IconWrapper = styled(Box)(() => ({
     color: '#ffd700',
     filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.6))',
   },
+  [theme.breakpoints.down('md')]: {
+    '& .MuiSvgIcon-root': { fontSize: '1.2rem' }
+  },
+  [theme.breakpoints.down('sm')]: {
+    '& .MuiSvgIcon-root': { fontSize: '1rem' }
+  }
 }));
 
 /* --- Default single animated band --- */
@@ -149,7 +188,7 @@ export default function AnimatedBand() {
 }
 
 /* --------------------------------------------------------
-   Premium CrossBands component
+   Premium CrossBands component (responsive)
    -------------------------------------------------------- */
 export function CrossBands({
   frontItems = [
@@ -162,7 +201,7 @@ export function CrossBands({
   const frontDup = [...frontItems, ...frontItems];
   const backDup = [...backItems, ...backItems];
 
-  const CrossWrapper = styled(Box)(() => ({
+  const CrossWrapper = styled(Box)(({ theme }) => ({
     position: 'relative',
     width: '100%',
     height: 300,
@@ -170,17 +209,22 @@ export function CrossBands({
     alignItems: 'center',
     justifyContent: 'center',
     pointerEvents: 'none',
+    overflow: 'hidden',
+    [theme.breakpoints.down('md')]: { height: 240 },
+    [theme.breakpoints.down('sm')]: { height: 180 },
   }));
 
-  const FrontBand = styled(BandContainer)(() => ({
+  const FrontBand = styled(BandContainer)(({ theme }) => ({
     width: '95%',
     height: 80,
     zIndex: 2,
     transform: 'rotate(-2deg)',
     background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 20%, #2d2d2d 40%, #1a1a1a 60%, #0a0a0a 100%)',
+    [theme.breakpoints.down('md')]: { height: 72, transform: 'rotate(-1deg)' },
+    [theme.breakpoints.down('sm')]: { height: 56, transform: 'rotate(0deg)', margin: theme.spacing(1,0) }
   }));
 
-  const BackBand = styled(BandContainer)(() => ({
+  const BackBand = styled(BandContainer)(({ theme }) => ({
     position: 'absolute',
     left: '50%',
     top: '50%',
@@ -192,11 +236,16 @@ export function CrossBands({
     background: 'linear-gradient(135deg, #1a0a0a 0%, #2a1a1a 20%, #3d2d2d 40%, #2a1a1a 60%, #1a0a0a 100%)',
     '&::before, &::after': {
       background: 'linear-gradient(90deg, transparent, #ff6b35, #ffd700, #ff6b35, transparent)',
-    }
+    },
+    [theme.breakpoints.down('md')]: { transform: 'translate(-50%, -50%) rotate(80deg)', width: '120%' },
+    [theme.breakpoints.down('sm')]: { transform: 'translate(-50%, -50%) rotate(70deg)', width: '150%', height: 56 }
   }));
 
-  const ScrollingTextBack = styled(ScrollingText)(() => ({
+  const ScrollingTextBack = styled(ScrollingText)(({ theme }) => ({
     animation: `${scrollRight} 32s linear infinite`,
+    gap: 48,
+    [theme.breakpoints.down('md')]: { gap: 28 },
+    [theme.breakpoints.down('sm')]: { gap: 18 }
   }));
 
   return (

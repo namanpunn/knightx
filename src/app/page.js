@@ -19,7 +19,7 @@ export default function Home() {
       <Box id="why">
         <WhyChoose />
       </Box>
-      <Box sx={{position:'relative', mt:12}}>
+      <Box sx={{position:'relative', mt:{xs:0, md:12}}}>
         <Banner />
         <Banner2 />
       </Box>

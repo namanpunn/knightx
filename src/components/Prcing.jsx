@@ -259,10 +259,10 @@ const PremiumGymPricing = () => {
             </Box>
           </Fade>
 
-          <Grid container spacing={4} sx={{ display: 'flex', justifyContent: 'center',}}>
+          <Grid container spacing={4} sx={{ display: 'flex', justifyContent: 'center'}}>
             {/* Pricing Cards */}
             <Grid item xs={12} md={8}>
-              <Grid container spacing={3}>
+              <Grid container spacing={3} sx={{display:'flex', justifyContent: 'center', mx:"16px"}}>
                 {plans.map((plan, index) => (
                   <Grid item xs={12} sm={6} key={plan.id}>
                     <Fade in={isVisible} timeout={800 + index * 200}>

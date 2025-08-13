@@ -5,6 +5,7 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
 import { styled, keyframes } from '@mui/material/styles';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import GroupIcon from '@mui/icons-material/Group';
@@ -24,15 +25,6 @@ const fadeInUp = keyframes`
 
 
 
-const pulseGlow = keyframes`
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
-  }
-`;
-
 const Section = styled(Box)(({ theme }) => ({
   background: `
     linear-gradient(135deg, 
@@ -45,8 +37,8 @@ const Section = styled(Box)(({ theme }) => ({
   color: '#fff',
   position: 'relative',
   overflow: 'hidden',
-  paddingTop: theme.spacing(12),
-  paddingBottom: theme.spacing(12),
+  paddingTop: theme.spacing(10),
+  paddingBottom: theme.spacing(8),
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -103,11 +95,13 @@ const FeatureCard = styled(Card)(({ theme }) => ({
     0 0 0 1px rgba(255, 215, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.1)
   `,
-  width: 300,
+  width: 320,
+  maxWidth: '100%',
   textAlign: 'center',
-  transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+  transition: 'all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
   position: 'relative',
   overflow: 'hidden',
+  margin: '0 auto',
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -119,7 +113,7 @@ const FeatureCard = styled(Card)(({ theme }) => ({
     transition: 'left 0.6s ease',
   },
   '&:hover': {
-    transform: 'translateY(-8px) scale(1.02)',
+    transform: 'translateY(-6px) scale(1.01)',
     border: '1px solid rgba(255, 215, 0, 0.6)',
     boxShadow: `
       0 20px 40px rgba(0, 0, 0, 0.6),
@@ -129,6 +123,11 @@ const FeatureCard = styled(Card)(({ theme }) => ({
     '&::before': {
       left: '100%',
     }
+  },
+  [theme.breakpoints.down('sm')]: {
+    width: '100%',
+    borderRadius: 14,
+    padding: theme.spacing(1),
   }
 }));
 
@@ -153,40 +152,45 @@ const IconWrap = styled(Box)(({ theme }) => ({
   '&::before': {
     content: '""',
     position: 'absolute',
-    inset: -2,
-    background: 'linear-gradient(45deg, #FFD700, transparent, #FFD700)',
+        inset: -2,
+        background: 'linear-gradient(45deg, #FFD700, transparent, #FFD700)',
     borderRadius: 22,
     opacity: 0,
     transition: 'opacity 0.3s ease',
     zIndex: -1,
   },
   '&:hover': {
-    transform: 'scale(1.1) rotateY(10deg)',
-    animation: `${pulseGlow} 2s infinite`,
+    transform: 'scale(1.06) rotateY(6deg)',
     '&::before': {
       opacity: 1,
     }
+  },
+  [theme.breakpoints.down('sm')]: {
+    width: 56,
+    height: 56,
+    borderRadius: 14,
+    marginBottom: 12,
   }
 }));
 
-const CentralImageContainer = styled(Box)(() => ({
+const CentralImageContainer = styled(Box)(({ theme }) => ({
   position: 'relative',
   zIndex: 10,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  marginBottom: theme.spacing(4),
   '&::after': {
     content: '""',
     position: 'absolute',
     inset: 0,
     background: 'radial-gradient(ellipse at center, rgba(255, 215, 0, 0.1) 0%, transparent 70%)',
     borderRadius: '50%',
-    animation: `${pulseGlow} 4s infinite`,
     zIndex: -1,
   }
 }));
 
-const FeatureCardPositioned = styled(FeatureCard)(({ position }) => ({
+const FeatureCardPositioned = styled(FeatureCard)(({ theme, position }) => ({
   position: 'absolute',
   animation: `${fadeInUp} 0.8s ease-out forwards`,
   animationDelay: position === 'top-left' ? '0.1s' : 
@@ -195,87 +199,96 @@ const FeatureCardPositioned = styled(FeatureCard)(({ position }) => ({
   ...(position === 'top-left' && {
     top: -40,
     left: -320,
-    '@media (max-width: 1600px)': {
-      left: -180,
-    },
-    '@media (max-width: 1500px)': {
+    [theme.breakpoints.down('xl')]: {
       left: 60,
+    },
+    [theme.breakpoints.down('lg')]: {
+      left: 60,
+      top: -20,
     },
   }),
   ...(position === 'top-right' && {
     top: -40,
     right: -120,
-    '@media (max-width: 1600px)': {
-      right: -180,
-    },
-    '@media (max-width: 1500px)': {
+    [theme.breakpoints.down('xl')]: {
       right: 60,
+    },
+    [theme.breakpoints.down('lg')]: {
+      right: 60,
+      top: -20,
     },
   }),
   ...(position === 'bottom-left' && {
     bottom: -40,
     left: -120,
-    '@media (max-width: 1600px)': {
-      left: -180,
-    },
-    '@media (max-width: 1500px)': {
+    [theme.breakpoints.down('xl')]: {
       left: 60,
+    },
+    [theme.breakpoints.down('lg')]: {
+      left: 60,
+      bottom: -20,
     },
   }),
   ...(position === 'bottom-right' && {
     bottom: -40,
     right: -120,
-    '@media (max-width: 1600px)': {
-      right: -180,
-    },
-    '@media (max-width: 1500px)': {
+    [theme.breakpoints.down('xl')]: {
       right: 60,
     },
+    [theme.breakpoints.down('lg')]: {
+      right: 60,
+      bottom: -20,
+    },
   }),
-  '@media (max-width: 1400px)': {
+  [theme.breakpoints.down('md')]: {
     position: 'relative',
     top: 'auto',
     left: 'auto',
     right: 'auto',
     bottom: 'auto',
-    margin: '20px auto',
-  },
+    margin: `${theme.spacing(2)} auto`,
+    width: '100%'
+  }
 }));
 
-const ContentWrapper = styled(Box)(() => ({
+const ContentWrapper = styled(Box)(({ theme }) => ({
   position: 'relative',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   minHeight: 600,
-}));
-
-const MobileGrid = styled(Box)(() => ({
-  display: 'none',
-  '@media (max-width: 1200px)': {
-    display: 'grid',
-    gridTemplateColumns: '1fr',
-    gap: 32,
-    marginTop: 100,
-    '@media (min-width: 768px)': {
-      gridTemplateColumns: '1fr 1fr',
-    },
-  },
-}));
-
-const StyledImage = styled(Box)(() => ({
-  position: 'relative',
-  filter: 'contrast(1.1) brightness(1.05)',
-  transition: 'all 0.3s ease',
-  '&:hover': {
-    transform: 'scale(1.02)',
-    filter: 'contrast(1.15) brightness(1.1)',
+  [theme.breakpoints.down('md')]: {
+    minHeight: 'auto',
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(4),
+    flexDirection: 'column',
   }
 }));
 
-const HeaderBox = styled(Box)(() => ({
+const StyledImage = styled('img')(({ theme }) => ({
+  position: 'relative',
+  filter: 'contrast(1.1) brightness(1.05)',
+  transition: 'all 0.3s ease',
+  display: 'block',
+  width: 720,
+  maxWidth: '100%',
+  height: 'auto',
+  borderRadius: 12,
+  '&:hover': {
+    transform: 'scale(1.02)',
+    filter: 'contrast(1.15) brightness(1.1)',
+  },
+  [theme.breakpoints.down('md')]: {
+    width: 320,
+  },
+  [theme.breakpoints.down('sm')]: {
+    width: 280,
+  }
+}));
+
+const HeaderBox = styled(Box)(({ theme }) => ({
   textAlign: 'center',
-  marginBottom: 80,
+  marginBottom: 48,
   position: 'relative',
   '&::before': {
     content: '""',
@@ -292,25 +305,25 @@ const HeaderBox = styled(Box)(() => ({
 export default function WhyChoose() {
   const features = [
     {
-      icon: <FitnessCenterIcon sx={{ fontSize: 36 }} />,
+      icon: <FitnessCenterIcon sx={{ fontSize: { xs: 22, md: 36 } }} />,
       title: 'Pro Equipment',
       text: 'State-of-the-art machines and equipment from leading brands, meticulously maintained for optimal performance and safety.',
       position: 'top-left'
     },
     {
-      icon: <GroupIcon sx={{ fontSize: 36 }} />,
+      icon: <GroupIcon sx={{ fontSize: { xs: 22, md: 36 } }} />,
       title: 'Elite Coaches',
       text: 'Certified personal trainers with years of experience, dedicated to helping you achieve your fitness goals efficiently.',
       position: 'top-right'
     },
     {
-      icon: <FavoriteIcon sx={{ fontSize: 36 }} />,
+      icon: <FavoriteIcon sx={{ fontSize: { xs: 22, md: 36 } }} />,
       title: 'Cardio Excellence',
       text: 'Comprehensive cardiovascular training programs designed to improve endurance, burn fat, and boost overall health.',
       position: 'bottom-left'
     },
     {
-      icon: <AccessTimeIcon sx={{ fontSize: 36 }} />,
+      icon: <AccessTimeIcon sx={{ fontSize: { xs: 22, md: 36 } }} />,
       title: 'Flexible Hours',
       text: '24/7 access with flexible membership plans that adapt to your busy lifestyle and training preferences.',
       position: 'bottom-right'
@@ -326,7 +339,7 @@ export default function WhyChoose() {
             variant="h1" 
             sx={{ 
               fontWeight: 800, 
-              fontSize: { xs: '2.5rem', md: '3.5rem', lg: '4.5rem' },
+              fontSize: { xs: '2rem', md: '3.5rem', lg: '4.5rem' },
               letterSpacing: '0.05em',
               mb: 1,
               background: 'linear-gradient(135deg, #ffffff 0%, #f5f5f5 50%, #ffffff 100%)',
@@ -341,12 +354,12 @@ export default function WhyChoose() {
           <Typography
             variant="subtitle1"
             sx={{
-              color: 'rgba(255, 255, 255, 0.7)',
-              fontSize: '1.1rem',
+              color: 'rgba(255, 255, 255, 0.8)',
+              fontSize: { xs: '0.95rem', md: '1.1rem' },
               fontWeight: 300,
-              letterSpacing: '0.1em',
+              letterSpacing: '0.08em',
               mb: 3,
-              maxWidth: 600,
+              maxWidth: 720,
               mx: 'auto',
             }}
           >
@@ -358,19 +371,12 @@ export default function WhyChoose() {
         {/* Content */}
         <ContentWrapper>
           {/* Central Image */}
-          
+          <CentralImageContainer>
             <StyledImage
-              component="img"
-              src="images/why.png"
+              src={'/images/why.png'}
               alt="Premium fitness experience"
-              sx={{
-                width: { xs: 280, md: 380, lg: 720 },
-                height: 'auto',
-                objectFit: 'contain',
-                borderRadius: 3,
-              }}
             />
-        
+          </CentralImageContainer>
 
           {/* Desktop Positioned Feature Cards */}
           <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
@@ -385,7 +391,7 @@ export default function WhyChoose() {
                     sx={{ 
                       fontWeight: 700, 
                       mb: 2,
-                      fontSize: '1.4rem',
+                      fontSize: '1.25rem',
                       background: 'linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%)',
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
@@ -395,7 +401,7 @@ export default function WhyChoose() {
                   </Typography>
                   <Typography 
                     sx={{ 
-                      color: 'rgba(255,255,255,0.8)', 
+                      color: 'rgba(255,255,255,0.9)', 
                       fontSize: '0.95rem',
                       lineHeight: 1.7,
                       fontWeight: 300,
@@ -409,41 +415,43 @@ export default function WhyChoose() {
           </Box>
 
           {/* Mobile/Tablet Grid Layout */}
-          <Box sx={{ display: { lg: 'none' }, position: 'absolute', inset: 0 }}>
-            <MobileGrid>
+          <Box sx={{ display: { lg: 'none' }, width: '100%' }}>
+            <Grid container spacing={3} sx={{ mt: 2 }}>
               {features.map((feature, index) => (
-                <FeatureCard key={index}>
-                  <CardContent sx={{ p: 4 }}>
-                    <IconWrap>
-                      {feature.icon}
-                    </IconWrap>
-                    <Typography 
-                      variant="h5" 
-                      sx={{ 
-                        fontWeight: 700, 
-                        mb: 2,
-                        fontSize: '1.4rem',
-                        background: 'linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                      }}
-                    >
-                      {feature.title}
-                    </Typography>
-                    <Typography 
-                      sx={{ 
-                        color: 'rgba(255,255,255,0.8)', 
-                        fontSize: '0.95rem',
-                        lineHeight: 1.7,
-                        fontWeight: 300,
-                      }}
-                    >
-                      {feature.text}
-                    </Typography>
-                  </CardContent>
-                </FeatureCard>
+                <Grid item xs={12} sm={6} key={index}>
+                  <FeatureCard>
+                    <CardContent sx={{ p: { xs: 2.5, sm: 3, md: 4 } }}>
+                      <IconWrap>
+                        {feature.icon}
+                      </IconWrap>
+                      <Typography 
+                        variant="h6" 
+                        sx={{ 
+                          fontWeight: 700, 
+                          mb: 1.5,
+                          fontSize: { xs: '1rem', md: '1.2rem' },
+                          background: 'linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%)',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
+                        }}
+                      >
+                        {feature.title}
+                      </Typography>
+                      <Typography 
+                        sx={{ 
+                          color: 'rgba(255,255,255,0.9)', 
+                          fontSize: { xs: '0.85rem', md: '0.95rem' },
+                          lineHeight: 1.6,
+                          fontWeight: 300,
+                        }}
+                      >
+                        {feature.text}
+                      </Typography>
+                    </CardContent>
+                  </FeatureCard>
+                </Grid>
               ))}
-            </MobileGrid>
+            </Grid>
           </Box>
         </ContentWrapper>
       </Container>

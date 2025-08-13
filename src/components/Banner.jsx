@@ -48,7 +48,7 @@ const edgeGlow = keyframes`
 
 /* === PREMIUM STYLED COMPONENTS === */
 
-const PremiumBandContainer = styled(Box)(({ theme, variant = 'primary' }) => ({
+const PremiumBandContainer = styled(Box, { shouldForwardProp: (p) => p !== 'variant' })(({ theme, variant = 'primary' }) => ({
   position: 'relative',
   width: '100%',
   height: 100,
@@ -59,7 +59,7 @@ const PremiumBandContainer = styled(Box)(({ theme, variant = 'primary' }) => ({
   transform: 'rotate(-2.5deg)',
   zIndex: 10,
   borderRadius: theme.spacing(1),
-  background: variant === 'primary' 
+  background: variant === 'primary'
     ? 'linear-gradient(135deg, #0a0a1f 0%, #1a1a3e 20%, #2d1b69 40%, #4c1d95 60%, #1a1a3e 80%, #0a0a1f 100%)'
     : 'linear-gradient(135deg, #1a0a0a 0%, #3d1a00 20%, #8b3a00 40%, #cc4125 60%, #3d1a00 80%, #1a0a0a 100%)',
   backgroundSize: '300% 300%',
@@ -69,7 +69,6 @@ const PremiumBandContainer = styled(Box)(({ theme, variant = 'primary' }) => ({
     inset 0 2px 4px rgba(255,255,255,0.1),
     inset 0 -2px 4px rgba(0,0,0,0.3)
   `,
-  
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -83,7 +82,6 @@ const PremiumBandContainer = styled(Box)(({ theme, variant = 'primary' }) => ({
     animation: `${scrollLeft} 4s linear infinite, ${edgeGlow} 2s ease-in-out infinite`,
     borderRadius: `${theme.spacing(1)} ${theme.spacing(1)} 0 0`,
   },
-  
   '&::after': {
     content: '""',
     position: 'absolute',
@@ -97,66 +95,88 @@ const PremiumBandContainer = styled(Box)(({ theme, variant = 'primary' }) => ({
     animation: `${scrollRight} 4s linear infinite, ${edgeGlow} 2s ease-in-out infinite`,
     borderRadius: `0 0 ${theme.spacing(1)} ${theme.spacing(1)}`,
   },
+  [theme.breakpoints.down('md')]: {
+    height: 84,
+    transform: 'rotate(-1.2deg)'
+  },
+  [theme.breakpoints.down('sm')]: {
+    height: 72,
+    transform: 'rotate(0deg)',
+    borderRadius: theme.spacing(0.5),
+  }
 }));
 
-const ShimmerOverlay = styled(Box)(({ variant = 'primary' }) => ({
+const ShimmerOverlay = styled(Box, { shouldForwardProp: (p) => p !== 'variant' })(({ variant = 'primary' }) => ({
   position: 'absolute',
   inset: 0,
   background: variant === 'primary'
-    ? 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%)'
-    : 'linear-gradient(90deg, transparent 0%, rgba(255,107,53,0.2) 50%, transparent 100%)',
+    ? 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.12) 50%, transparent 100%)'
+    : 'linear-gradient(90deg, transparent 0%, rgba(255,107,53,0.16) 50%, transparent 100%)',
   backgroundSize: '200% 100%',
   animation: `${shimmerEffect} 3s linear infinite`,
   opacity: 0.8,
+  pointerEvents: 'none'
 }));
 
-const ScrollingContent = styled(Box)(({ speed = 35 }) => ({
+const ScrollingContent = styled(Box, { shouldForwardProp: (p) => p !== 'speed' })(({ speed = 35 }) => ({
   display: 'flex',
   alignItems: 'center',
   whiteSpace: 'nowrap',
   animation: `${scrollLeft} ${speed}s linear infinite`,
-  gap: 100,
+  gap: 60,
   height: '100%',
+  paddingLeft: 20,
+  paddingRight: 20,
+  '& > *': {
+    pointerEvents: 'auto'
+  }
 }));
 
 const WorkoutText = styled(Typography)(({ theme }) => ({
   color: '#ffffff',
   fontSize: '2rem',
   fontWeight: 900,
-  letterSpacing: '0.15em',
+  letterSpacing: '0.12em',
   textTransform: 'uppercase',
   fontFamily: '"Inter", "Roboto", "Arial", sans-serif',
   textShadow: `
     0 2px 4px rgba(0,0,0,0.7),
-    0 0 20px rgba(255,255,255,0.1),
+    0 0 12px rgba(255,255,255,0.06),
     0 4px 8px rgba(0,0,0,0.3)
   `,
   display: 'flex',
   alignItems: 'center',
-  gap: theme.spacing(2),
-  
+  gap: 12,
   [theme.breakpoints.down('md')]: {
-    fontSize: '1.6rem',
+    fontSize: '1.4rem',
+    letterSpacing: '0.08em'
   },
   [theme.breakpoints.down('sm')]: {
-    fontSize: '1.4rem',
-  },
+    fontSize: '1.05rem',
+    letterSpacing: '0.06em',
+    fontWeight: 800
+  }
 }));
 
-const AnimatedIcon = styled(Box)(({ color = '#ffd700' }) => ({
+const AnimatedIcon = styled(Box)(({ color = '#ffd700', theme }) => ({
   color: color,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   animation: `${pulseGlow} 3s ease-in-out infinite`,
-  
   '& .MuiSvgIcon-root': {
     fontSize: '2rem',
     filter: `drop-shadow(0 0 12px ${color}90)`,
   },
+  [theme.breakpoints.down('md')]: {
+    '& .MuiSvgIcon-root': { fontSize: '1.6rem' }
+  },
+  [theme.breakpoints.down('sm')]: {
+    '& .MuiSvgIcon-root': { fontSize: '1.2rem' }
+  }
 }));
 
-const CrossBandWrapper = styled(Box)(() => ({
+const CrossBandWrapper = styled(Box)(({ theme }) => ({
   position: 'relative',
   width: '100%',
   height: 400,
@@ -165,6 +185,12 @@ const CrossBandWrapper = styled(Box)(() => ({
   justifyContent: 'center',
   pointerEvents: 'none',
   overflow: 'hidden',
+  [theme.breakpoints.down('md')]: {
+    height: 300
+  },
+  [theme.breakpoints.down('sm')]: {
+    height: 220
+  }
 }));
 
 const VerticalBand = styled(PremiumBandContainer)(({ theme }) => ({
@@ -172,17 +198,37 @@ const VerticalBand = styled(PremiumBandContainer)(({ theme }) => ({
   left: '50%',
   top: '50%',
   transform: 'translate(-50%, -50%) rotate(88deg)',
-  width: '100%',
+  width: '120%',
   height: 100,
   opacity: 0.92,
   zIndex: 5,
+  [theme.breakpoints.down('md')]: {
+    transform: 'translate(-50%, -50%) rotate(80deg)',
+    width: '140%'
+  },
+  [theme.breakpoints.down('sm')]: {
+    transform: 'translate(-50%, -50%) rotate(72deg)',
+    width: '170%',
+    height: 72,
+    opacity: 0.95
+  }
 }));
 
-const HorizontalBand = styled(PremiumBandContainer)(() => ({
+const HorizontalBand = styled(PremiumBandContainer)(({ theme }) => ({
   width: '95%',
   height: 100,
   zIndex: 15,
   transform: 'rotate(-1.5deg)',
+  [theme.breakpoints.down('md')]: {
+    width: '98%',
+    height: 84,
+    transform: 'rotate(-0.8deg)'
+  },
+  [theme.breakpoints.down('sm')]: {
+    width: '100%',
+    height: 72,
+    transform: 'rotate(0deg)'
+  }
 }));
 
 /* === PREMIUM BANNER COMPONENT === */
@@ -192,17 +238,17 @@ export default function PremiumGymBanner({
   customItems = null 
 }) {
   const iconMap = {
-    'STRENGTH TRAINING': <FitnessCenterIcon />,
-    'HIIT WORKOUTS': <FlashOnIcon />,
-    'PERSONAL TRAINING': <AccessibilityNewIcon />,
-    'GROUP CLASSES': <SelfImprovementIcon />,
-    'FUNCTIONAL FITNESS': <FitnessCenterIcon />,
-    'CARDIO ZONE': <DirectionsRunIcon />,
-    'POWERLIFTING': <FitnessCenterIcon />,
-    'YOGA & PILATES': <SelfImprovementIcon />,
-    'CROSSFIT': <FlashOnIcon />,
-    'BODYBUILDING': <FitnessCenterIcon />,
-    'CONDITIONING': <FlashOnIcon />,
+    'STRENGTH TRAINING': <FitnessCenterIcon />, 
+    'HIIT WORKOUTS': <FlashOnIcon />, 
+    'PERSONAL TRAINING': <AccessibilityNewIcon />, 
+    'GROUP CLASSES': <SelfImprovementIcon />, 
+    'FUNCTIONAL FITNESS': <FitnessCenterIcon />, 
+    'CARDIO ZONE': <DirectionsRunIcon />, 
+    'POWERLIFTING': <FitnessCenterIcon />, 
+    'YOGA & PILATES': <SelfImprovementIcon />, 
+    'CROSSFIT': <FlashOnIcon />, 
+    'BODYBUILDING': <FitnessCenterIcon />, 
+    'CONDITIONING': <FlashOnIcon />, 
     'ANIMAL FLOW': <AccessibilityNewIcon />,
   };
 
@@ -235,8 +281,8 @@ export default function PremiumGymBanner({
       
       <ScrollingContent speed={speed}>
         {duplicatedItems.map((item, index) => (
-          <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-            <WorkoutText>
+          <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, sm: 2.5, md: 3 } }}>
+            <WorkoutText sx={{ fontSize: { xs: '0.95rem', sm: '1.1rem', md: '1.6rem' } }}>
               {item}
             </WorkoutText>
             <AnimatedIcon color={variant === 'primary' ? '#ffd700' : '#ff6b35'}>
@@ -285,7 +331,7 @@ export function PremiumCrossBands({
         <ShimmerOverlay variant="secondary" />
         <ScrollingContent 
           speed={backSpeed}
-          sx={{ animation: `${scrollRight} ${backSpeed}s linear infinite` }}
+          sx={{ animation: `${scrollRight} ${backSpeed}s linear infinite`, gap: { xs: 20, sm: 36, md: 48 } }}
         >
           {backDup.map((item, i) => (
             <Box 
@@ -293,16 +339,15 @@ export function PremiumCrossBands({
               sx={{ 
                 display: 'flex', 
                 alignItems: 'center', 
-                gap: 3,
-                transform: 'rotate(90deg)' 
+                gap: { xs: 1.5, sm: 3 },
+                transform: 'rotate(90deg)',
+                pointerEvents: 'auto'
               }}
             >
-              <WorkoutText sx={{ fontSize: '1.8rem' }}>
+              <WorkoutText sx={{ fontSize: { xs: '0.9rem', sm: '1.25rem', md: '1.8rem' } }}>
                 {item}
               </WorkoutText>
-              <AnimatedIcon color="#ff6b35">
-                {iconMap[item] || <StarIcon />}
-              </AnimatedIcon>
+              <AnimatedIcon color="#ff6b35" />
             </Box>
           ))}
         </ScrollingContent>
@@ -313,8 +358,8 @@ export function PremiumCrossBands({
         <ShimmerOverlay variant="primary" />
         <ScrollingContent speed={frontSpeed}>
           {frontDup.map((item, i) => (
-            <Box key={`front-${i}`} sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-              <WorkoutText>
+            <Box key={`front-${i}`} sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, sm: 3 } }}>
+              <WorkoutText sx={{ fontSize: { xs: '0.95rem', sm: '1.2rem', md: '1.6rem' } }}>
                 {item}
               </WorkoutText>
               <AnimatedIcon color="#ffd700">
@@ -351,7 +396,6 @@ export function CompactGymBanner({
         animation: `${gradientFlow} 8s ease infinite`,
         borderRadius: 1,
         boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
-        
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -370,7 +414,7 @@ export function CompactGymBanner({
           alignItems: 'center',
           whiteSpace: 'nowrap',
           animation: `${scrollLeft} ${speed}s linear infinite`,
-          gap: 8,
+          gap: { xs: 4, sm: 6 }
         }}
       >
         {duplicatedItems.map((item, index) => (
@@ -378,9 +422,9 @@ export function CompactGymBanner({
             <Typography
               sx={{
                 color: 'white',
-                fontSize: '1.2rem',
+                fontSize: { xs: '0.95rem', sm: '1.2rem' },
                 fontWeight: 800,
-                letterSpacing: '0.1em',
+                letterSpacing: '0.08em',
                 textTransform: 'uppercase',
                 textShadow: '0 2px 4px rgba(0,0,0,0.5)',
               }}
@@ -390,7 +434,7 @@ export function CompactGymBanner({
             <StarIcon 
               sx={{ 
                 color: '#ffd700', 
-                fontSize: '1rem',
+                fontSize: { xs: '0.9rem', sm: '1rem' },
                 filter: 'drop-shadow(0 0 6px rgba(255,215,0,0.6))',
               }} 
             />

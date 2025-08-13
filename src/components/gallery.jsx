@@ -12,89 +12,273 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
-import { styled, useTheme } from '@mui/material/styles';
+import Badge from '@mui/material/Badge';
+import { styled, useTheme, alpha } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import StarIcon from '@mui/icons-material/Star';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 
-/*
-  PremiumGymGallery.jsx
-  - A Next.js + MUI React component that matches a dark, luxe gym theme with gold accents.
-  - Features: responsive grid, hover reveal, gold glow, accessible lightbox with keyboard navigation, simple filters/tags.
-  - Usage: <PremiumGymGallery images={imagesArray} initialFilter="All" />
-
-  imagesArray: [{ src: '/images/gym1.webp', alt: '...' , tags: ['equipment','studio'], featured: true }, ...]
-*/
-
-// ----------------------
-// DEFAULT IMAGES ARRAY
-// ----------------------
-// Place your images under the `public/images` folder (or supply remote URLs) and the gallery
-// will render dynamically based on the array length and tags.
 
 const defaultImages = [
-  { src: '/images/gym1.webp', alt: 'Athlete lifting dumbbells', title: 'Strength Session', caption: 'High-intensity strength training.', tags: ['strength', 'equipment'], featured: true },
-  { src: '/images/gym2.webp', alt: 'Treadmills at the gym', title: 'Cardio Zone', caption: 'State-of-the-art cardio machines.', tags: ['cardio'], featured: false },
-  { src: '/images/gym3.webp', alt: 'Trainer coaching client', title: 'Personal Coaching', caption: 'Elite coaches to guide you.', tags: ['coaching', 'staff'], featured: false },
-  { src: '/images/gym4.webp', alt: 'Close up of a kettlebell', title: 'Pro Equipment', caption: 'Top-tier free weights and rigs.', tags: ['equipment'], featured: false },
-  { src: '/images/gym5.webp', alt: 'Group fitness class', title: 'Group Classes', caption: 'Dynamic group training sessions.', tags: ['classes'], featured: false },
-  { src: '/images/gym6.webp', alt: 'Gym interior with lighting', title: 'Studio Space', caption: 'Premium studio and ambience.', tags: ['studio', 'ambience'], featured: false },
-  { src: '/images/gym7.webp', alt: 'Athlete stretching', title: 'Recovery', caption: 'Stretching and recovery zones.', tags: ['recovery'], featured: false },
-  { src: '/images/gym8.webp', alt: 'Barbells lined up', title: 'Barbell Row', caption: 'Olympic bars & racks.', tags: ['strength', 'equipment'], featured: false },
+  { src: '/images/gym1.webp', alt: 'Athlete lifting dumbbells', title: 'Strength Training', caption: 'High-intensity strength training with professional equipment.', tags: ['strength', 'equipment'], featured: true },
+  { src: '/images/gym2.webp', alt: 'Treadmills at the gym', title: 'Cardio Zone', caption: 'State-of-the-art cardio machines for optimal performance.', tags: ['cardio'], featured: false },
+  { src: '/images/gym3.webp', alt: 'Trainer coaching client', title: 'Personal Training', caption: 'Elite coaches to guide your transformation journey.', tags: ['coaching', 'staff'], featured: true },
+  { src: '/images/gym4.webp', alt: 'Close up of a kettlebell', title: 'Pro Equipment', caption: 'Top-tier free weights and professional rigs.', tags: ['equipment'], featured: false },
+  { src: '/images/gym5.webp', alt: 'Group fitness class', title: 'Group Classes', caption: 'Dynamic group training sessions for all levels.', tags: ['classes'], featured: false },
+  { src: '/images/gym6.webp', alt: 'Gym interior with lighting', title: 'Premium Studio', caption: 'Luxury studio space with perfect ambience.', tags: ['studio', 'ambience'], featured: true },
+  { src: '/images/gym7.webp', alt: 'Athlete stretching', title: 'Recovery Zone', caption: 'Dedicated stretching and recovery areas.', tags: ['recovery'], featured: false },
+  { src: '/images/gym8.webp', alt: 'Barbells lined up', title: 'Olympic Station', caption: 'Professional Olympic bars and power racks.', tags: ['strength', 'equipment'], featured: false },
 ];
 
-const GOLD = '#e6b600';
-const GOLD_TRANSPARENT = 'rgba(230,182,0,0.12)';
+// Premium color palette
+const GOLD = '#FFD700';
+const GOLD_DARK = '#B8860B';
+const GOLD_LIGHT = '#FFF8DC';
+const DARK_BG = '#0A0A0A';
+const CARD_BG = 'rgba(20, 20, 20, 0.8)';
+const BORDER_GOLD = 'rgba(255, 215, 0, 0.2)';
 
 const GalleryWrap = styled(Box)(({ theme }) => ({
   width: '100%',
-  padding: '40px clamp(16px, 6vw, 80px)',
-  background: 'linear-gradient(180deg, rgba(0,0,0,0.01), rgba(0,0,0,0.22))',
+  padding: '60px clamp(20px, 5vw, 100px)',
+  background: `linear-gradient(135deg, ${DARK_BG} 0%, rgba(20, 20, 20, 0.95) 50%, ${DARK_BG} 100%)`,
+  position: 'relative',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'radial-gradient(ellipse at top center, rgba(255, 215, 0, 0.03) 0%, transparent 70%)',
+    pointerEvents: 'none',
+  }
 }));
 
-const CardRoot = styled(Card)(({ theme }) => ({
-  borderRadius: 16,
+const SectionHeader = styled(Box)(({ theme }) => ({
+  textAlign: 'center',
+  marginBottom: '50px',
+  position: 'relative',
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    bottom: '-15px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: '80px',
+    height: '3px',
+    background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)`,
+    borderRadius: '2px',
+  }
+}));
+
+const FilterContainer = styled(Stack)(({ theme }) => ({
+  justifyContent: 'center',
+  marginBottom: '40px',
+  padding: '20px',
+  background: 'rgba(0, 0, 0, 0.3)',
+  borderRadius: '20px',
+  border: `1px solid ${BORDER_GOLD}`,
+  backdropFilter: 'blur(10px)',
+  [theme.breakpoints.down('sm')]: {
+    flexDirection: 'column',
+    gap: '12px',
+  }
+}));
+
+const FilterChip = styled(Chip)(({ active, theme }) => ({
+  borderRadius: '25px',
+  padding: '8px 5px',
+  height: '45px',
+  fontWeight: 700,
+  fontSize: '0.9rem',
+  textTransform: 'uppercase',
+  letterSpacing: '0.5px',
+  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+  cursor: 'pointer',
+  position: 'relative',
   overflow: 'hidden',
-  background: 'linear-gradient(180deg, rgba(255,255,255,0.014), rgba(0,0,0,0.12))',
-  border: `1px solid ${GOLD_TRANSPARENT}`,
-  boxShadow: '0 12px 36px rgba(0,0,0,0.6)',
-  transition: 'transform .32s ease, box-shadow .32s ease',
-  '&:hover': {
-    transform: 'translateY(-8px)',
-    boxShadow: `0 28px 64px rgba(0,0,0,0.7), 0 8px 30px rgba(230,182,0,0.06)`,
+  
+  ...(active ? {
+    color: '#000',
+    background: `linear-gradient(135deg, ${GOLD} 0%, ${GOLD_DARK} 100%)`,
+    border: `2px solid ${GOLD}`,
+    boxShadow: `0 8px 25px rgba(255, 215, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)`,
+    transform: 'translateY(-2px)',
+  } : {
+    color: '#E0E0E0',
+    background: 'rgba(30, 30, 30, 0.6)',
+    border: '2px solid rgba(255, 215, 0, 0.1)',
+    '&:hover': {
+      background: 'rgba(255, 215, 0, 0.1)',
+      border: `2px solid ${BORDER_GOLD}`,
+      transform: 'translateY(-1px)',
+      color: GOLD_LIGHT,
+    }
+  }),
+  
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: '-100%',
+    width: '100%',
+    height: '100%',
+    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent)',
+    transition: 'left 0.5s ease',
   },
+  '&:hover::before': {
+    left: '100%',
+  }
 }));
 
-const HoverMeta = styled(Box)(({ theme }) => ({
-  position: 'absolute',
-  left: 0,
-  right: 0,
-  bottom: 0,
-  padding: '18px',
-  display: 'flex',
-  justifyContent: 'space-between',
-  gap: 12,
-  alignItems: 'center',
-  backdropFilter: 'blur(6px)',
-  background: 'linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.42))',
+const CardRoot = styled(Card)(({ featured, theme }) => ({
+  borderRadius: '20px',
+  overflow: 'hidden',
+  background: CARD_BG,
+  border: featured ? `2px solid ${GOLD}` : `1px solid ${BORDER_GOLD}`,
+  boxShadow: featured 
+    ? `0 20px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.2)`
+    : '0 15px 35px rgba(0, 0, 0, 0.7)',
+  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+  position: 'relative',
+  
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: featured 
+      ? 'linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, transparent 50%)'
+      : 'transparent',
+    pointerEvents: 'none',
+    zIndex: 1,
+  },
+  
+  '&:hover': {
+    transform: 'translateY(-12px) scale(1.02)',
+    boxShadow: `0 30px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 215, 0, 0.15)`,
+    border: `2px solid ${GOLD}`,
+    
+    '& .image-overlay': {
+      opacity: 1,
+      transform: 'translateY(0)',
+    },
+    
+    '& .play-button': {
+      opacity: 1,
+      transform: 'translate(-50%, -50%) scale(1)',
+    }
+  }
 }));
 
-const ImgWrap = styled('div')(({ theme }) => ({
+const ImgWrap = styled(Box)(({ theme }) => ({
   position: 'relative',
   width: '100%',
   aspectRatio: '4 / 3',
   overflow: 'hidden',
-  display: 'block',
-  background: 'radial-gradient(circle at 10% 20%, rgba(230,182,0,0.03), transparent 10%)',
+  background: 'radial-gradient(circle at center, rgba(255, 215, 0, 0.05) 0%, transparent 70%)',
+  
+  '& img': {
+    transition: 'transform 0.4s ease-out',
+  },
+  
+  '&:hover img': {
+    transform: 'scale(1.1)',
+  }
+}));
+
+const ImageOverlay = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  left: 0,
+  right: 0,
+  bottom: 0,
+  padding: '10px 20px',
+  background: 'linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.9) 100%)',
+  backdropFilter: 'blur(10px)',
+  transform: 'translateY(10px)',
+  opacity: 0,
+  transition: 'all 0.3s ease-out',
+  zIndex: 2,
+}));
+
+
+const FeaturedBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    top: '15px',
+    right: '15px',
+    background: `linear-gradient(135deg, ${GOLD} 0%, ${GOLD_DARK} 100%)`,
+    color: '#000',
+    fontWeight: 'bold',
+    fontSize: '0.55rem',
+    padding: '8px 12px',
+    borderRadius: '20px',
+    border: '2px solid rgba(0, 0, 0, 0.2)',
+    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.3)',
+  }
 }));
 
 const LightboxContent = styled(DialogContent)(({ theme }) => ({
   padding: 0,
-  background: 'linear-gradient(180deg,#060606,#0b0b0b)',
+  background: 'rgba(0, 0, 0, 0.95)',
+  backdropFilter: 'blur(20px)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   position: 'relative',
+  minHeight: '100vh',
+}));
+
+const LightboxImage = styled(Box)(({ theme }) => ({
+  borderRadius: '15px',
+  overflow: 'hidden',
+  border: `2px solid ${GOLD}`,
+  boxShadow: `0 0 50px rgba(255, 215, 0, 0.3)`,
+  background: 'rgba(10, 10, 10, 0.8)',
+}));
+
+const NavigationButton = styled(IconButton)(({ theme }) => ({
+  position: 'absolute',
+  top: '50%',
+  transform: 'translateY(-50%)',
+  width: '60px',
+  height: '60px',
+  background: 'rgba(0, 0, 0, 0.7)',
+  backdropFilter: 'blur(10px)',
+  border: `2px solid ${BORDER_GOLD}`,
+  color: GOLD,
+  transition: 'all 0.3s ease',
+  zIndex: 10,
+  
+  '&:hover': {
+    background: `linear-gradient(135deg, ${GOLD} 0%, ${GOLD_DARK} 100%)`,
+    color: '#000',
+    transform: 'translateY(-50%) scale(1.1)',
+  }
+}));
+
+const PaginationDot = styled(Box)(({ active, theme }) => ({
+  width: active ? '40px' : '12px',
+  height: '12px',
+  borderRadius: '6px',
+  background: active 
+    ? `linear-gradient(90deg, ${GOLD} 0%, ${GOLD_DARK} 100%)`
+    : 'rgba(255, 255, 255, 0.3)',
+  cursor: 'pointer',
+  transition: 'all 0.3s ease',
+  border: active ? '2px solid rgba(255, 215, 0, 0.5)' : 'none',
+  
+  '&:hover': {
+    background: active 
+      ? `linear-gradient(90deg, ${GOLD_LIGHT} 0%, ${GOLD} 100%)`
+      : 'rgba(255, 255, 255, 0.5)',
+    transform: 'scale(1.2)',
+  }
 }));
 
 export default function PremiumGymGallery({ images = defaultImages, initialFilter = 'All' }) {
@@ -105,13 +289,11 @@ export default function PremiumGymGallery({ images = defaultImages, initialFilte
   const lightboxRef = useRef();
 
   const tags = Array.from(new Set(['All', ...images.flatMap((i) => i.tags || [])]));
-
   const filtered = images.filter((img) => filter === 'All' || (img.tags || []).includes(filter));
   const hasImages = filtered.length > 0;
   const current = hasImages ? filtered[index] : null;
 
   const openAt = useCallback((i) => {
-    // ensure index within bounds (i is index in filtered list)
     const idx = Math.max(0, Math.min(i, Math.max(0, filtered.length - 1)));
     setIndex(idx);
     setOpen(true);
@@ -119,7 +301,7 @@ export default function PremiumGymGallery({ images = defaultImages, initialFilte
 
   const close = useCallback(() => setOpen(false), []);
 
-  // keyboard navigation for lightbox
+  // Keyboard navigation
   useEffect(() => {
     if (!open || !hasImages) return;
     const onKey = (e) => {
@@ -131,7 +313,6 @@ export default function PremiumGymGallery({ images = defaultImages, initialFilte
     return () => window.removeEventListener('keydown', onKey);
   }, [open, filtered.length, close, hasImages]);
 
-  // guard when filters change and index out-of-range
   useEffect(() => {
     if (!hasImages) {
       setIndex(0);
@@ -140,196 +321,273 @@ export default function PremiumGymGallery({ images = defaultImages, initialFilte
     }
   }, [filter, filtered.length, index, hasImages]);
 
-  // safer filter setter: if selecting a tag with no images, ignore or fallback to All
   const handleSetFilter = (t) => {
     const candidate = images.filter((img) => t === 'All' || (img.tags || []).includes(t));
-    if (candidate.length === 0) {
-      // ignore empty filter — or optionally set to 'All'
-      // setFilter('All');
-      return;
-    }
+    if (candidate.length === 0) return;
     setFilter(t);
     setIndex(0);
-    // if lightbox is open but new filtered set doesn't include previous index, close it
     if (open && candidate.length === 0) setOpen(false);
   };
 
   return (
     <GalleryWrap>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={4}>
-        <Box>
-          <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em' }}>
-            Our Transformations
+      <SectionHeader>
+        <Stack direction="row" alignItems="center" justifyContent="center" spacing={2} mb={2}>
+          <FitnessCenterIcon sx={{ color: GOLD, fontSize: '2.5rem' }} />
+          <Typography 
+            variant="h2" 
+            sx={{ 
+              fontWeight: 900, 
+              background: `linear-gradient(135deg, ${GOLD} 0%, ${GOLD_LIGHT} 100%)`,
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              letterSpacing: '-0.02em',
+              textAlign: 'center',
+              fontSize: { xs: '2.5rem', md: '3.5rem' }
+            }}
+          >
+            GALLERY
           </Typography>
-          <Typography variant="body2" sx={{ color: '#bfbfbf', mt: 1 }}>
-            Curated gallery of workout moments, equipment, and studio shots.
-          </Typography>
-        </Box>
-
-        <Stack direction="row" spacing={1} alignItems="center">
-          {tags.map((t) => (
-            <Chip
-              key={t}
-              label={t}
-              clickable
-              size="small"
-              onClick={() => handleSetFilter(t)}
-              sx={{
-                borderRadius: 10,
-                px: 1.5,
-                fontWeight: 700,
-                color: filter === t ? '#111' : '#eaeaea',
-                background: filter === t ? `linear-gradient(90deg, ${GOLD}, #ffc72b)` : 'transparent',
-                border: filter === t ? `1px solid ${GOLD}` : `1px solid rgba(255,255,255,0.04)`,
-                boxShadow: filter === t ? '0 8px 30px rgba(230,182,0,0.12)' : 'none',
-              }}
-            />
-          ))}
         </Stack>
-      </Stack>
+        <Typography 
+          variant="h6" 
+          sx={{ 
+            color: '#CCCCCC', 
+            fontWeight: 400,
+            maxWidth: '600px',
+            margin: '0 auto',
+            lineHeight: 1.6
+          }}
+        >
+          Experience our world-class facilities, cutting-edge equipment, and transformation stories
+        </Typography>
+      </SectionHeader>
 
-      <Grid container spacing={{ xs: 2, md: 3 }}>
+      <FilterContainer direction="row" spacing={2} alignItems="center" sx={{display:{xs:'none', md:'flex'}}}>
+        {tags.map((tag) => (
+          <FilterChip
+            key={tag}
+            label={tag}
+            active={filter === tag ? 1 : 0}
+            onClick={() => handleSetFilter(tag)}
+            icon={tag === 'All' ? <StarIcon /> : null}
+          />
+        ))}
+      </FilterContainer>
+
+      <Grid container spacing={{ xs: 3, md: 3 }}>
         {filtered.map((img, i) => (
-          <Grid key={img.src + i} item xs={12} sm={6} md={4} lg={3}>
-            <CardRoot>
-              <CardActionArea onClick={() => openAt(i)} sx={{ position: 'relative' }}>
-                <ImgWrap aria-hidden={true}>
-                  <Image
-                    src={img.src}
-                    alt={img.alt || 'Gallery image'}
-                    width={300}
-                    height={260}
-                    objectFit="cover"
-                    sizes="(max-width:600px) 100vw, (max-width:1200px) 50vw, 33vw"
-                    priority={img.featured}
-                  />
-                </ImgWrap>
-
-                <HoverMeta sx={{ opacity: 0, transition: 'opacity .28s ease', '&:hover': { opacity: 1 } }}>
-                  <Box>
-                    <Typography variant="subtitle2" sx={{ color: '#fff', fontWeight: 700 }}>
-                      {img.title || ''}
-                    </Typography>
-                    {img.caption && (
-                      <Typography variant="caption" sx={{ color: '#bdbdbd' }}>
-                        {img.caption}
+          <Grid key={img.src + i} item xs={12} sm={6} md={4} lg={3} sx={{ display: 'flex', justifyContent: 'center' }}>
+            <FeaturedBadge 
+              badgeContent={img.featured ? "FEATURED" : null}
+              invisible={!img.featured}
+            >
+              <CardRoot featured={img.featured}>
+                <CardActionArea onClick={() => openAt(i)} sx={{ position: 'relative', height: '100%' }}>
+                  <ImgWrap>
+                    <Image
+                      src={img.src}
+                      alt={img.alt || 'Gallery image'}
+                      width={300}
+                      height={260}
+                      style={{ objectFit: 'cover' }}
+                      sizes="(max-width:600px) 100vw, (max-width:1200px) 50vw, 33vw"
+                      priority={img.featured}
+                    />
+                    
+                    
+                    
+                    <ImageOverlay className="image-overlay">
+                      <Typography 
+                        variant="h6" 
+                        sx={{ 
+                          color: '#fff', 
+                          fontWeight: 800,
+                          marginBottom: '8px',
+                          fontSize: '1.1rem'
+                        }}
+                      >
+                        {img.title || ''}
                       </Typography>
-                    )}
-                  </Box>
-
-                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                    {(img.tags || []).slice(0, 2).map((t) => (
-                      <Chip
-                        size="small"
-                        key={t}
-                        label={t}
-                        sx={{ bgcolor: 'transparent', color: '#f6f6f2', border: `1px solid ${GOLD_TRANSPARENT}` }}
-                      />
-                    ))}
-                  </Box>
-                </HoverMeta>
-              </CardActionArea>
-            </CardRoot>
+                      
+                      {img.caption && (
+                        <Typography 
+                          variant="body2" 
+                          sx={{ 
+                            color: '#E0E0E0',
+                            marginBottom: '12px',
+                            lineHeight: 1.4
+                          }}
+                        >
+                          {img.caption}
+                        </Typography>
+                      )}
+                      
+                      <Stack direction="row" spacing={1} flexWrap="wrap">
+                        {(img.tags || []).slice(0, 2).map((tag) => (
+                          <Chip
+                            key={tag}
+                            label={tag}
+                            size="small"
+                            sx={{
+                              bgcolor: 'rgba(255, 215, 0, 0.1)',
+                              color: GOLD,
+                              border: `1px solid ${BORDER_GOLD}`,
+                              fontWeight: 600,
+                              fontSize: '0.7rem'
+                            }}
+                          />
+                        ))}
+                      </Stack>
+                    </ImageOverlay>
+                  </ImgWrap>
+                </CardActionArea>
+              </CardRoot>
+            </FeaturedBadge>
           </Grid>
         ))}
       </Grid>
 
-      {/* Lightbox dialog */}
+      {/* Enhanced Lightbox */}
       <Dialog
         open={open && hasImages}
         onClose={close}
         maxWidth={false}
+        fullScreen
         PaperProps={{
           sx: {
-            background: 'transparent',
-            boxShadow: 'none',
-            overflow: 'visible',
+            background: 'rgba(0, 0, 0, 0.95)',
+            backdropFilter: 'blur(20px)',
+            height:{xs:'95vh', md:'100vh'}
           },
         }}
-        aria-labelledby="gallery-lightbox"
       >
         <LightboxContent>
-          <Box sx={{ position: 'absolute', top: 18, right: 18, zIndex: 10 }}>
-            <IconButton onClick={close} aria-label="Close lightbox" sx={{ bgcolor: 'rgba(0,0,0,0.4)' }}>
-              <CloseIcon sx={{ color: '#fff' }} />
-            </IconButton>
-          </Box>
+          <IconButton 
+            onClick={close}
+            sx={{
+              position: 'absolute',
+              top: 30,
+              right: 30,
+              width: '50px',
+              height: '50px',
+              background: 'rgba(0, 0, 0, 0.7)',
+              border: `2px solid ${BORDER_GOLD}`,
+              color: GOLD,
+              zIndex: 10,
+              '&:hover': {
+                background: `linear-gradient(135deg, ${GOLD} 0%, ${GOLD_DARK} 100%)`,
+                color: '#000'
+              }
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
 
-          <IconButton
+          <NavigationButton
             onClick={() => setIndex((s) => (filtered.length ? (s - 1 + filtered.length) % filtered.length : 0))}
-            aria-label="Previous"
-            sx={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', zIndex: 10, bgcolor: 'rgba(0,0,0,0.35)' }}
+            sx={{ left: 30 }}
           >
-            <ArrowBackIosNewIcon sx={{ color: '#fff' }} />
-          </IconButton>
+            <ArrowBackIosNewIcon />
+          </NavigationButton>
 
-          <IconButton
+          <NavigationButton
             onClick={() => setIndex((s) => (filtered.length ? (s + 1) % filtered.length : 0))}
-            aria-label="Next"
-            sx={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', zIndex: 10, bgcolor: 'rgba(0,0,0,0.35)' }}
+            sx={{ right: 30 }}
           >
-            <ArrowForwardIosIcon sx={{ color: '#fff' }} />
-          </IconButton>
+            <ArrowForwardIosIcon />
+          </NavigationButton>
 
           {hasImages && current && (
-            <Box sx={{ width: { xs: '92vw', md: '80vw' }, maxWidth: 1400, position: 'relative' }}>
-              <Box sx={{
-                borderRadius: 12,
-                overflow: 'hidden',
-                border: `1px solid ${GOLD_TRANSPARENT}`,
-                boxShadow: '0 40px 100px rgba(0,0,0,0.7)',
-              }}>
-                <Box sx={{ position: 'relative', height: { xs: '60vh', md: '75vh' } }}>
+            <Box sx={{ 
+              width: { xs: '90vw', md: '85vw' }, 
+              maxWidth: 1200, 
+              margin: '0 auto'
+            }}>
+              <LightboxImage>
+                <Box sx={{ 
+                  position: 'relative', 
+                  height: { xs: '50vh', md: '70vh' },
+                  minHeight: '400px'
+                }}>
                   <Image
                     src={current.src}
                     alt={current.alt || 'Gallery image enlarged'}
-                    layout="fill"
-                    objectFit="contain"
+                    fill
+                    style={{ objectFit: 'contain' }}
                     sizes="100vw"
                     priority
                   />
                 </Box>
 
-                <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', bgcolor: 'rgba(0,0,0,0.35)' }}>
-                  <Box>
-                    <Typography variant="h6" sx={{ color: '#fff', fontWeight: 800 }}>
-                      {current.title || ''}
-                    </Typography>
-                    {current.caption && (
-                      <Typography variant="body2" sx={{ color: '#cfcfcf' }}>
-                        {current.caption}
+                <Box sx={{ 
+                  p: 4, 
+                  background: 'linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.9) 100%)',
+                  backdropFilter: 'blur(10px)'
+                }}>
+                  <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" alignItems={{ xs: 'flex-start', md: 'center' }} spacing={2}>
+                    <Box>
+                      <Typography 
+                        variant="h4" 
+                        sx={{ 
+                          color: GOLD, 
+                          fontWeight: 800,
+                          marginBottom: '8px',
+                          display:{xs:'none', md:'block'}
+                        }}
+                      >
+                        {current.title || ''}
                       </Typography>
-                    )}
-                  </Box>
+                      {current.caption && (
+                        <Typography 
+                          variant="body1" 
+                          sx={{ 
+                            color: '#E0E0E0',
+                            lineHeight: 1.6,
+                             display:{xs:'none', md:'block'}
+                          }}
+                        >
+                          {current.caption}
+                        </Typography>
+                      )}
+                    </Box>
 
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    {(current.tags || []).map((t) => (
-                      <Chip key={t} label={t} size="small" sx={{ color: '#fff', border: `1px solid ${GOLD_TRANSPARENT}`, bgcolor: 'transparent' }} />
-                    ))}
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      {(current.tags || []).map((tag) => (
+                        <Chip 
+                          key={tag} 
+                          label={tag} 
+                          sx={{ 
+                            color: GOLD, 
+                            border: `1px solid ${BORDER_GOLD}`, 
+                            bgcolor: 'rgba(255, 215, 0, 0.1)',
+                            fontWeight: 600,
+                             display:{xs:'none', md:'block'}
+                          }} 
+                        />
+                      ))}
+                    </Stack>
                   </Stack>
                 </Box>
-              </Box>
+              </LightboxImage>
 
-              {/* pagination dots */}
-              <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center', gap: 2 }}>
+              {/* Enhanced pagination */}
+              <Stack 
+                direction="row" 
+                spacing={1} 
+                justifyContent="center" 
+                alignItems="center"
+                sx={{ mt: 3 }}
+              >
                 {filtered.map((_, i) => (
-                  <Box
+                  <PaginationDot
                     key={i}
+                    active={i === index ? 1 : 0}
                     onClick={() => setIndex(i)}
-                    sx={{
-                      width: i === index ? 28 : 10,
-                      height: 10,
-                      borderRadius: 99,
-                      transition: 'width .28s ease',
-                      bgcolor: i === index ? GOLD : 'rgba(255,255,255,0.12)',
-                      cursor: 'pointer',
-                    }}
-                    role="button"
-                    tabIndex={0}
-                    aria-label={`Go to image ${i + 1}`}
                   />
                 ))}
-              </Box>
+              </Stack>
             </Box>
           )}
         </LightboxContent>

@@ -150,6 +150,7 @@ const MobileMenu = styled(Menu)(({ theme }) => ({
     border: `1px solid ${alpha('#FFD700', 0.2)}`,
     borderRadius: theme.spacing(2),
     marginTop: theme.spacing(1),
+    marginLeft: theme.spacing(1.5),
     minWidth: 280,
     boxShadow: `0 20px 40px ${alpha('#000', 0.5)}`,
   },
@@ -277,7 +278,7 @@ export default function Navbar() {
             </Box>
 
             {/* MOBILE MENU BUTTON */}
-            <Box sx={{ display: { xs: "flex", lg: "none" }, ml: 'auto' }}>
+            <Box sx={{ display: { xs: "flex", lg: "none" }, ml: '5rem' }}>
               <IconButton 
                 onClick={handleMenuOpen} 
                 aria-label="open menu" 
