@@ -359,18 +359,19 @@ const isMobile = useMediaQuery('(max-width:600px)');
                 <Box
                   sx={{
                     position: 'absolute',
-                    top:{xs:'-295px ',md:"-370px"},
-                    left: { xs: '-260px', md:'-360px' },
+                    top:{xs:'-295px ',md:"-370px",xl:"-450px"},
+                    left: { xs: '-210px', md:'-360px',xl:'-300px' },
                     width: { xs: '70%', md: '65%' },
                     height: '90%',
                     filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.3))',
+                    
                   }}
                 >
                   <Image
-                    src="/images/image.png"
+                    src={isMobile ? "/images/phone.png" : "/images/image.png"}
                     alt="Fitness transformation - professional athlete"
                     height={isMobile ? 350 : 800}
-                    width={isMobile ? 500 : 1000}
+                    width={isMobile ? 400 : 1000}
                     priority
                     sizes="(max-width: 768px) 70vw, 35vw"
                   />

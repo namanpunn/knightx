@@ -198,7 +198,7 @@ const FeatureCardPositioned = styled(FeatureCard)(({ theme, position }) => ({
                   position === 'bottom-left' ? '0.3s' : '0.4s',
   ...(position === 'top-left' && {
     top: -40,
-    left: -320,
+    left: -0,
     [theme.breakpoints.down('xl')]: {
       left: 60,
     },
@@ -209,7 +209,7 @@ const FeatureCardPositioned = styled(FeatureCard)(({ theme, position }) => ({
   }),
   ...(position === 'top-right' && {
     top: -40,
-    right: -120,
+    right: -0,
     [theme.breakpoints.down('xl')]: {
       right: 60,
     },
@@ -220,7 +220,7 @@ const FeatureCardPositioned = styled(FeatureCard)(({ theme, position }) => ({
   }),
   ...(position === 'bottom-left' && {
     bottom: -40,
-    left: -120,
+    left: -0,
     [theme.breakpoints.down('xl')]: {
       left: 60,
     },
@@ -231,7 +231,7 @@ const FeatureCardPositioned = styled(FeatureCard)(({ theme, position }) => ({
   }),
   ...(position === 'bottom-right' && {
     bottom: -40,
-    right: -120,
+    right: -0,
     [theme.breakpoints.down('xl')]: {
       right: 60,
     },
