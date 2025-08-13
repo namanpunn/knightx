@@ -24,7 +24,6 @@ const navItems = [
   "#why",
   "#pricing",
   "#gallery",
-  "#pricing",
   "#testimonial",
 ];
 const navLabels = ["Home", "Why Knightx", "Pricing", "Gallery", "Testimonial"];

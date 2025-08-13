@@ -29,7 +29,7 @@ export default function Home() {
       <Box id="gallery">
         <PremiumGymGallery />
       </Box>
-      <Box id="testimonials">
+      <Box id="testimonial">
         <PremiumGymTestimonials />
       </Box>
       <PremiumGymFooter />
