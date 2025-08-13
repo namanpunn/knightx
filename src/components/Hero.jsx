@@ -14,6 +14,7 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import StarIcon from '@mui/icons-material/Star';
 import { styled, alpha, keyframes } from '@mui/material/styles';
 import Image from 'next/image';
+import { useMediaQuery } from '@mui/material';
 
 // Keyframe animations
 const float = keyframes`
@@ -242,8 +243,7 @@ export default function Hero() {
   useEffect(() => {
     setIsVisible(true);
   }, []);
-
-
+const isMobile = useMediaQuery('(max-width:600px)');
 
   return (
     <HeroSection>
@@ -273,7 +273,7 @@ export default function Hero() {
       </FloatingElement>
 
       <ContentContainer maxWidth="xl">
-        <Grid container spacing={6} alignItems="center">
+        <Grid container spacing={6} alignItems="center" sx={{display:'flex', flexDirection: { xs: 'column', md: 'row' }, gap: {xs:32,md:0}}}>
           {/* Left Content */}
           <Grid item xs={12} lg={6} sx={{mt:'-100px'}}>
             <Box sx={{ color: '#fff' }}>
@@ -287,6 +287,7 @@ export default function Hero() {
                   fontWeight: 600,
                   border: `1px solid ${alpha('#FFD700', 0.3)}`,
                   mb: 3,
+                  mt:{ xs: 8, md: 0 }
                 }}
               />
 
@@ -358,8 +359,8 @@ export default function Hero() {
                 <Box
                   sx={{
                     position: 'absolute',
-                    top:"-370px",
-                    left: '-400px',
+                    top:{xs:'-295px ',md:"-370px"},
+                    left: { xs: '-260px', md:'-360px' },
                     width: { xs: '70%', md: '65%' },
                     height: '90%',
                     filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.3))',
@@ -368,8 +369,8 @@ export default function Hero() {
                   <Image
                     src="/images/image.png"
                     alt="Fitness transformation - professional athlete"
-                    height={800}
-                    width={1000}
+                    height={isMobile ? 350 : 800}
+                    width={isMobile ? 500 : 1000}
                     priority
                     sizes="(max-width: 768px) 70vw, 35vw"
                   />
