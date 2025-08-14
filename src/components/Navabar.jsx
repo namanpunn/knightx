@@ -238,7 +238,7 @@ export default function Navbar() {
                       ml:'8px'
                     }}
                   >
-                    Knightx
+                    KnightX
                   </Typography>
                 </Box>
               </Link>

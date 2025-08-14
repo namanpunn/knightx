@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <Box sx={{ mt: 8 }}>
+      <Box sx={{ mt: {xs:6,md:8} }}>
         <Hero />
       </Box>
       <Box id="why">
