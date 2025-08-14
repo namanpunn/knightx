@@ -10,15 +10,12 @@ import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Fade from "@mui/material/Fade";
-import Slide from "@mui/material/Slide";
-import useScrollTrigger from "@mui/material/useScrollTrigger";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { styled, alpha } from "@mui/material/styles";
 import Image from "next/image";
+
 const navItems = [
   "/",
   "#why",
@@ -29,16 +26,21 @@ const navItems = [
 const navLabels = ["Home", "Why Knightx", "Pricing", "Gallery", "Testimonial"];
 
 // Styled components for premium look
-const StyledAppBar = styled(AppBar)(({ theme, scrolled }) => ({
-  backgroundColor: scrolled ? alpha('#000', 0.95) : 'rgba(0, 0, 0, 0.85)',
+const StyledAppBar = styled(AppBar)(({ theme }) => ({
+  backgroundColor: 'rgba(0, 0, 0, 0.85)',
   backdropFilter: 'blur(20px)',
-  borderBottom: scrolled 
-    ? `1px solid ${alpha('#FFD700', 0.2)}` 
-    : '1px solid rgba(255,255,255,0.08)',
+  borderBottom: '1px solid rgba(255,255,255,0.08)',
   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-  boxShadow: scrolled 
-    ? `0 8px 32px ${alpha('#000', 0.3)}` 
-    : 'none',
+  
+  '&.scrolled': {
+    backgroundColor: alpha('#000', 0.95),
+    borderBottom: `1px solid ${alpha('#FFD700', 0.2)}`,
+    boxShadow: `0 8px 32px ${alpha('#000', 0.3)}`,
+  },
+  
+  '&.hidden': {
+    transform: 'translateY(-100%)',
+  }
 }));
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
@@ -62,23 +64,7 @@ const LogoContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-const LogoBox = styled(Box)(({ theme }) => ({
-  width: 48,
-  height: 40,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)',
-  borderRadius: theme.spacing(1),
-  boxShadow: `0 4px 16px ${alpha('#FFD700', 0.3)}`,
-  transition: 'all 0.3s ease',
-  '&:hover': {
-    boxShadow: `0 6px 24px ${alpha('#FFD700', 0.4)}`,
-    transform: 'translateY(-1px)',
-  },
-}));
-
-const NavButton = styled(Button)(({ theme, active }) => ({
+const NavButton = styled(Button)(({ theme }) => ({
   color: '#fff',
   textTransform: 'none',
   fontSize: '16px',
@@ -89,12 +75,16 @@ const NavButton = styled(Button)(({ theme, active }) => ({
   borderRadius: theme.spacing(1),
   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
   
+  '&.active::before': {
+    width: '100%',
+  },
+  
   '&::before': {
     content: '""',
     position: 'absolute',
     bottom: 0,
     left: '50%',
-    width: active ? '100%' : '0%',
+    width: '0%',
     height: '3px',
     backgroundColor: '#FFD700',
     transform: 'translateX(-50%)',
@@ -156,13 +146,19 @@ const MobileMenu = styled(Menu)(({ theme }) => ({
   },
 }));
 
-const MobileMenuItem = styled(MenuItem)(({ theme, selected }) => ({
+const MobileMenuItem = styled(MenuItem)(({ theme }) => ({
   padding: theme.spacing(1.5, 2),
   margin: theme.spacing(0.5, 1),
   borderRadius: theme.spacing(1),
-  backgroundColor: selected ? alpha('#FFD700', 0.1) : 'transparent',
-  borderLeft: selected ? `3px solid #FFD700` : '3px solid transparent',
   transition: 'all 0.2s ease',
+  
+  '&.selected': {
+    backgroundColor: alpha('#FFD700', 0.1),
+    borderLeft: `3px solid #FFD700`,
+    '& .MuiTypography-root': {
+      fontWeight: 700,
+    },
+  },
   
   '&:hover': {
     backgroundColor: alpha('#FFD700', 0.15),
@@ -171,183 +167,283 @@ const MobileMenuItem = styled(MenuItem)(({ theme, selected }) => ({
   
   '& .MuiTypography-root': {
     color: '#fff',
-    fontWeight: selected ? 700 : 600,
+    fontWeight: 600,
   },
 }));
 
-function HideOnScroll({ children }) {
-  const trigger = useScrollTrigger({
-    threshold: 100,
-  });
-
-  return (
-    <Slide appear={false} direction="down" in={!trigger}>
-      {children}
-    </Slide>
-  );
-}
-
 export default function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [mounted, setMounted] = React.useState(false);
+  const [scrolled, setScrolled] = React.useState(false);
+  const [hidden, setHidden] = React.useState(false);
+  const [lastScrollY, setLastScrollY] = React.useState(0);
+  
   const open = Boolean(anchorEl);
   
-  // Detect scroll for dynamic styling
-  const scrollTrigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 50,
-  });
+  // Handle client-side mounting
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Handle scroll effects on client side only
+  React.useEffect(() => {
+    if (!mounted) return;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Update scrolled state
+      setScrolled(currentScrollY > 50);
+      
+      // Update hidden state (hide on scroll down, show on scroll up)
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setHidden(true);
+      } else {
+        setHidden(false);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [mounted, lastScrollY]);
 
   const handleMenuOpen = (e) => setAnchorEl(e.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
 
   const handleNavigation = (href) => {
     handleMenuClose();
-    router.push(href);
+    if (href.startsWith('#')) {
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      router.push(href);
+    }
   };
 
-  return (
-    <HideOnScroll>
-      <StyledAppBar position="fixed" elevation={0} scrolled={scrollTrigger}>
+  const handleLogoClick = () => {
+    router.push('/');
+  };
+
+  // Show loading state during SSR to prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <StyledAppBar position="fixed" elevation={0}>
         <Container maxWidth="xl">
           <StyledToolbar disableGutters>
-            
-            {/* LOGO SECTION */}
             <LogoContainer>
-              <Link href="/" passHref>
-                <Box
-                  component="a"
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    textDecoration: "none",
-                    color: "inherit",
-                  }}
-                >
-
-                    <Image src="/images/logo.jpg" alt="Gym logo" height={50} width={50} style={{borderRadius: '50%'}}/>
-        
-
-                  <Typography 
-                    variant="h5" 
-                    sx={{ 
-                      color: "#fff", 
-                      fontWeight: 800,
-                      fontSize: { xs: '1.5rem', md: '1.75rem' },
-                      letterSpacing: '-0.02em',
-                      ml:'8px'
-                    }}
-                  >
-                    KnightX
-                  </Typography>
-                </Box>
-              </Link>
+              <Box
+                component="div"
+                sx={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: '50%',
+                  backgroundColor: '#333',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                {/* Placeholder for logo */}
+              </Box>
+              <Typography 
+                variant="h5" 
+                sx={{ 
+                  color: "#fff", 
+                  fontWeight: 800,
+                  fontSize: { xs: '1.5rem', md: '1.75rem' },
+                  letterSpacing: '-0.02em',
+                  ml:'8px'
+                }}
+              >
+                KnightX
+              </Typography>
             </LogoContainer>
-
-            {/* DESKTOP NAVIGATION */}
-            <Box 
-              sx={{ 
-                display: { xs: "none", lg: "flex" }, 
-                gap: 1, 
-                alignItems: "center",
-                ml: 'auto',
-                mr: 4,
-              }}
-            >
-              {navItems.map((href, i) => {
-                const label = navLabels[i];
-                const isActive = router.pathname === href;
-                return (
-                  <Link key={href} href={href} passHref>
-                    <NavButton
-                      component="a"
-                      active={isActive}
-                    >
-                      {label}
-                    </NavButton>
-                  </Link>
-                );
-              })}
+            
+            <Box sx={{ display: { xs: "none", lg: "flex" }, gap: 1, alignItems: "center", ml: 'auto', mr: 4 }}>
+              {navItems.map((href, i) => (
+                <NavButton key={href}>
+                  {navLabels[i]}
+                </NavButton>
+              ))}
             </Box>
-
-            {/* DESKTOP CTA */}
+            
             <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}>
               <CTAButton variant="contained">
                 Start Free Trial
               </CTAButton>
             </Box>
-
-            {/* MOBILE MENU BUTTON */}
+            
             <Box sx={{ display: { xs: "flex", lg: "none" } }}>
+              <IconButton sx={{ color: "#fff", width: 48, height: 48 }}>
+                <MenuIcon />
+              </IconButton>
+            </Box>
+          </StyledToolbar>
+        </Container>
+      </StyledAppBar>
+    );
+  }
+
+  return (
+    <StyledAppBar 
+      position="fixed" 
+      elevation={0} 
+      className={`${scrolled ? 'scrolled' : ''} ${hidden ? 'hidden' : ''}`}
+    >
+      <Container maxWidth="xl">
+        <StyledToolbar disableGutters>
+          
+          {/* LOGO SECTION */}
+          <LogoContainer onClick={handleLogoClick}>
+            <Image 
+              src="/images/logo.jpg" 
+              alt="Gym logo" 
+              height={50} 
+              width={50} 
+              style={{borderRadius: '50%'}}
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'block';
+              }}
+            />
+            <Box
+              sx={{
+                display: 'none',
+                width: 50,
+                height: 50,
+                borderRadius: '50%',
+                backgroundColor: '#FFD700',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <Typography sx={{ color: '#000', fontWeight: 'bold' }}>K</Typography>
+            </Box>
+            <Typography 
+              variant="h5" 
+              sx={{ 
+                color: "#fff", 
+                fontWeight: 800,
+                fontSize: { xs: '1.5rem', md: '1.75rem' },
+                letterSpacing: '-0.02em',
+                ml:'8px'
+              }}
+            >
+              KnightX
+            </Typography>
+          </LogoContainer>
+
+          {/* DESKTOP NAVIGATION */}
+          <Box 
+            sx={{ 
+              display: { xs: "none", lg: "flex" }, 
+              gap: 1, 
+              alignItems: "center",
+              ml: 'auto',
+              mr: 4,
+            }}
+          >
+            {navItems.map((href, i) => {
+              const label = navLabels[i];
+              const isActive = href === '/' ? pathname === '/' : pathname.includes(href);
+              return (
+                <NavButton
+                  key={href}
+                  className={isActive ? 'active' : ''}
+                  onClick={() => handleNavigation(href)}
+                >
+                  {label}
+                </NavButton>
+              );
+            })}
+          </Box>
+
+          {/* DESKTOP CTA */}
+          <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}>
+            <CTAButton variant="contained">
+              Start Free Trial
+            </CTAButton>
+          </Box>
+
+          {/* MOBILE MENU BUTTON */}
+          <Box sx={{ display: { xs: "flex", lg: "none" } }}>
+            <IconButton 
+              onClick={handleMenuOpen} 
+              aria-label="open menu" 
+              sx={{ 
+                color: "#fff",
+                width: 48,
+                height: 48,
+                '&:hover': {
+                  backgroundColor: alpha('#FFD700', 0.1),
+                },
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Box>
+
+          {/* MOBILE MENU */}
+          <MobileMenu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleMenuClose}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            transformOrigin={{ vertical: "top", horizontal: "right" }}
+            TransitionComponent={Fade}
+            transitionDuration={200}
+          >
+            {/* Close Button */}
+            <Box sx={{ px: 2, py: 1, display: "flex", justifyContent: "flex-end" }}>
               <IconButton 
-                onClick={handleMenuOpen} 
-                aria-label="open menu" 
+                size="small" 
+                onClick={handleMenuClose}
                 sx={{ 
-                  color: "#fff",
-                  width: 48,
-                  height: 48,
+                  color: '#fff',
                   '&:hover': {
                     backgroundColor: alpha('#FFD700', 0.1),
                   },
                 }}
               >
-                <MenuIcon />
+                <CloseIcon />
               </IconButton>
             </Box>
 
-            {/* MOBILE MENU */}
-            <MobileMenu
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleMenuClose}
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-              transformOrigin={{ vertical: "top", horizontal: "right" }}
-              TransitionComponent={Fade}
-              transitionDuration={200}
-            >
-              {/* Close Button */}
-              <Box sx={{ px: 2, py: 1, display: "flex", justifyContent: "flex-end" }}>
-                <IconButton 
-                  size="small" 
-                  onClick={handleMenuClose}
-                  sx={{ 
-                    color: '#fff',
-                    '&:hover': {
-                      backgroundColor: alpha('#FFD700', 0.1),
-                    },
-                  }}
-                >
-                  <CloseIcon />
-                </IconButton>
-              </Box>
-
-              {/* Navigation Items */}
-              {navItems.map((href, i) => (
+            {/* Navigation Items */}
+            {navItems.map((href, i) => {
+              const isSelected = href === '/' ? pathname === '/' : pathname.includes(href);
+              return (
                 <MobileMenuItem
                   key={href}
                   onClick={() => handleNavigation(href)}
-                  selected={router.pathname === href}
+                  className={isSelected ? 'selected' : ''}
                 >
                   <Typography variant="body1">
                     {navLabels[i]}
                   </Typography>
                 </MobileMenuItem>
-              ))}
+              );
+            })}
 
-              {/* Mobile CTA */}
-              <Box sx={{ p: 2, pt: 1 }}>
-                <CTAButton 
-                  fullWidth 
-                  onClick={handleMenuClose}
-                  sx={{ py: 1.5 }}
-                >
-                  Start Free Trial
-                </CTAButton>
-              </Box>
-            </MobileMenu>
-          </StyledToolbar>
-        </Container>
-      </StyledAppBar>
-    </HideOnScroll>
+            {/* Mobile CTA */}
+            <Box sx={{ p: 2, pt: 1 }}>
+              <CTAButton 
+                fullWidth 
+                onClick={handleMenuClose}
+                sx={{ py: 1.5 }}
+              >
+                Start Free Trial
+              </CTAButton>
+            </Box>
+          </MobileMenu>
+        </StyledToolbar>
+      </Container>
+    </StyledAppBar>
   );
 }
