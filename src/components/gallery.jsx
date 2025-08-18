@@ -21,7 +21,6 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StarIcon from '@mui/icons-material/Star';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 
-
 const defaultImages = [
   { src: '/images/gym1.webp', alt: 'Athlete lifting dumbbells', title: 'Strength Training', caption: 'High-intensity strength training with professional equipment.', tags: ['strength', 'equipment'], featured: true },
   { src: '/images/gym2.webp', alt: 'Treadmills at the gym', title: 'Cardio Zone', caption: 'State-of-the-art cardio machines for optimal performance.', tags: ['cardio'], featured: false },
@@ -89,6 +88,7 @@ const FilterContainer = styled(Stack)(({ theme }) => ({
   }
 }));
 
+// Fixed: Changed active prop to use actual boolean instead of number
 const FilterChip = styled(Chip)(({ active, theme }) => ({
   borderRadius: '25px',
   padding: '8px 5px',
@@ -207,7 +207,6 @@ const ImageOverlay = styled(Box)(({ theme }) => ({
   zIndex: 2,
 }));
 
-
 const FeaturedBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
     top: '15px',
@@ -259,9 +258,16 @@ const NavigationButton = styled(IconButton)(({ theme }) => ({
     background: `linear-gradient(135deg, ${GOLD} 0%, ${GOLD_DARK} 100%)`,
     color: '#000',
     transform: 'translateY(-50%) scale(1.1)',
+  },
+  
+  // Fixed: Added disabled styles to prevent issues when no images
+  '&:disabled': {
+    opacity: 0.5,
+    cursor: 'not-allowed',
   }
 }));
 
+// Fixed: Changed active prop to use actual boolean
 const PaginationDot = styled(Box)(({ active, theme }) => ({
   width: active ? '40px' : '12px',
   height: '12px',
@@ -288,46 +294,95 @@ export default function PremiumGymGallery({ images = defaultImages, initialFilte
   const [index, setIndex] = useState(0);
   const lightboxRef = useRef();
 
-  const tags = Array.from(new Set(['All', ...images.flatMap((i) => i.tags || [])]));
-  const filtered = images.filter((img) => filter === 'All' || (img.tags || []).includes(filter));
+  // Fixed: Added safety checks and memoization
+  const tags = React.useMemo(() => {
+    if (!images || images.length === 0) return ['All'];
+    return Array.from(new Set(['All', ...images.flatMap((i) => i.tags || [])]));
+  }, [images]);
+
+  const filtered = React.useMemo(() => {
+    if (!images || images.length === 0) return [];
+    return images.filter((img) => filter === 'All' || (img.tags || []).includes(filter));
+  }, [images, filter]);
+
   const hasImages = filtered.length > 0;
-  const current = hasImages ? filtered[index] : null;
+  const current = hasImages && index < filtered.length ? filtered[index] : null;
 
   const openAt = useCallback((i) => {
-    const idx = Math.max(0, Math.min(i, Math.max(0, filtered.length - 1)));
+    if (!hasImages) return;
+    const idx = Math.max(0, Math.min(i, filtered.length - 1));
     setIndex(idx);
     setOpen(true);
-  }, [filtered.length]);
+  }, [filtered.length, hasImages]);
 
   const close = useCallback(() => setOpen(false), []);
+
+  // Fixed: Improved navigation functions with bounds checking
+  const goToPrevious = useCallback(() => {
+    if (!hasImages) return;
+    setIndex((prev) => (prev - 1 + filtered.length) % filtered.length);
+  }, [filtered.length, hasImages]);
+
+  const goToNext = useCallback(() => {
+    if (!hasImages) return;
+    setIndex((prev) => (prev + 1) % filtered.length);
+  }, [filtered.length, hasImages]);
 
   // Keyboard navigation
   useEffect(() => {
     if (!open || !hasImages) return;
+    
     const onKey = (e) => {
       if (e.key === 'Escape') close();
-      if (e.key === 'ArrowLeft') setIndex((s) => (filtered.length ? (s - 1 + filtered.length) % filtered.length : 0));
-      if (e.key === 'ArrowRight') setIndex((s) => (filtered.length ? (s + 1) % filtered.length : 0));
+      if (e.key === 'ArrowLeft') goToPrevious();
+      if (e.key === 'ArrowRight') goToNext();
     };
+    
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [open, filtered.length, close, hasImages]);
+  }, [open, hasImages, close, goToPrevious, goToNext]);
 
+  // Fixed: Better index management when filter changes
   useEffect(() => {
-    if (!hasImages) {
+    if (filtered.length === 0) {
       setIndex(0);
+      if (open) setOpen(false);
     } else if (index >= filtered.length) {
       setIndex(0);
     }
-  }, [filter, filtered.length, index, hasImages]);
+  }, [filter, filtered.length, index, open]);
 
-  const handleSetFilter = (t) => {
-    const candidate = images.filter((img) => t === 'All' || (img.tags || []).includes(t));
-    if (candidate.length === 0) return;
-    setFilter(t);
+  // Fixed: Improved filter handling
+  const handleSetFilter = useCallback((tag) => {
+    if (!images || images.length === 0) return;
+    
+    const candidateImages = images.filter((img) => 
+      tag === 'All' || (img.tags || []).includes(tag)
+    );
+    
+    if (candidateImages.length === 0) return;
+    
+    setFilter(tag);
     setIndex(0);
-    if (open && candidate.length === 0) setOpen(false);
-  };
+    
+    // Close lightbox if it's open and the current image is not in the new filter
+    if (open && !candidateImages.includes(current)) {
+      setOpen(false);
+    }
+  }, [images, open, current]);
+
+  // Fixed: Handle edge case when no images are provided
+  if (!images || images.length === 0) {
+    return (
+      <GalleryWrap>
+        <SectionHeader>
+          <Typography variant="h4" sx={{ color: '#666', textAlign: 'center' }}>
+            No images available
+          </Typography>
+        </SectionHeader>
+      </GalleryWrap>
+    );
+  }
 
   return (
     <GalleryWrap>
@@ -369,7 +424,7 @@ export default function PremiumGymGallery({ images = defaultImages, initialFilte
           <FilterChip
             key={tag}
             label={tag}
-            active={filter === tag ? 1 : 0}
+            active={filter === tag} // Fixed: Use boolean instead of number
             onClick={() => handleSetFilter(tag)}
             icon={tag === 'All' ? <StarIcon /> : null}
           />
@@ -378,7 +433,7 @@ export default function PremiumGymGallery({ images = defaultImages, initialFilte
 
       <Grid container spacing={{ xs: 3, md: 3 }} sx={{display: 'flex', justifyContent: 'center'}}>
         {filtered.map((img, i) => (
-          <Grid key={img.src + i} item xs={12} sm={6} md={4} lg={3} sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Grid key={`${img.src}-${i}`} item xs={12} sm={6} md={3} lg={3} sx={{ display: 'flex', justifyContent: 'center', maxWidth: '300px' }}>
             <FeaturedBadge 
               badgeContent={img.featured ? "FEATURED" : null}
               invisible={!img.featured}
@@ -395,8 +450,6 @@ export default function PremiumGymGallery({ images = defaultImages, initialFilte
                       sizes="(max-width:600px) 100vw, (max-width:1200px) 50vw, 33vw"
                       priority={img.featured}
                     />
-                    
-                    
                     
                     <ImageOverlay className="image-overlay">
                       <Typography 
@@ -451,7 +504,7 @@ export default function PremiumGymGallery({ images = defaultImages, initialFilte
 
       {/* Enhanced Lightbox */}
       <Dialog
-        open={open && hasImages}
+        open={open && hasImages && current !== null} // Fixed: Added null check for current
         onClose={close}
         maxWidth={false}
         fullScreen
@@ -486,14 +539,16 @@ export default function PremiumGymGallery({ images = defaultImages, initialFilte
           </IconButton>
 
           <NavigationButton
-            onClick={() => setIndex((s) => (filtered.length ? (s - 1 + filtered.length) % filtered.length : 0))}
+            onClick={goToPrevious}
+            disabled={!hasImages} // Fixed: Add disabled state
             sx={{ left: 30 }}
           >
             <ArrowBackIosNewIcon />
           </NavigationButton>
 
           <NavigationButton
-            onClick={() => setIndex((s) => (filtered.length ? (s + 1) % filtered.length : 0))}
+            onClick={goToNext}
+            disabled={!hasImages} // Fixed: Add disabled state
             sx={{ right: 30 }}
           >
             <ArrowForwardIosIcon />
@@ -545,7 +600,7 @@ export default function PremiumGymGallery({ images = defaultImages, initialFilte
                           sx={{ 
                             color: '#E0E0E0',
                             lineHeight: 1.6,
-                             display:{xs:'none', md:'block'}
+                            display:{xs:'none', md:'block'}
                           }}
                         >
                           {current.caption}
@@ -563,7 +618,7 @@ export default function PremiumGymGallery({ images = defaultImages, initialFilte
                             border: `1px solid ${BORDER_GOLD}`, 
                             bgcolor: 'rgba(255, 215, 0, 0.1)',
                             fontWeight: 600,
-                             display:{xs:'none', md:'flex'},
+                            display:{xs:'none', md:'flex'},
                           }} 
                         />
                       ))}
@@ -583,7 +638,7 @@ export default function PremiumGymGallery({ images = defaultImages, initialFilte
                 {filtered.map((_, i) => (
                   <PaginationDot
                     key={i}
-                    active={i === index ? 1 : 0}
+                    active={i === index} // Fixed: Use boolean instead of number
                     onClick={() => setIndex(i)}
                   />
                 ))}
