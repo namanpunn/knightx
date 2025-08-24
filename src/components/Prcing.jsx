@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Box,
   Container,
@@ -98,6 +98,134 @@ const premiumTheme = createTheme({
     borderRadius: 12
   }
 });
+
+// Custom hook for animated counter with intersection observer
+const useAnimatedCounter = (end, duration = 2000, start = 0) => {
+  const [count, setCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
+          
+          let startTime;
+          const animate = (currentTime) => {
+            if (!startTime) startTime = currentTime;
+            const progress = Math.min((currentTime - startTime) / duration, 1);
+            
+            // Easing function for smooth animation
+            const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+            const currentCount = Math.floor(start + (end - start) * easeOutCubic);
+            
+            setCount(currentCount);
+
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            } else {
+              setCount(end); // Ensure we end at exact value
+            }
+          };
+
+          requestAnimationFrame(animate);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, [end, duration, start, hasAnimated]);
+
+  return [count, ref];
+};
+
+// Animated Counter Component
+const AnimatedCounter = ({ 
+  end, 
+  suffix = '', 
+  prefix = '', 
+  duration = 2000,
+  isDecimal = false,
+  ...props 
+}) => {
+  const [count, ref] = useAnimatedCounter(end, duration);
+  
+  const displayValue = isDecimal ? (count / 10).toFixed(1) : count;
+  
+  return (
+    <Typography 
+      ref={ref} 
+      variant="h4" 
+      fontWeight={800} 
+      sx={{ 
+        color: '#D4AF37',
+        transition: 'all 0.3s ease',
+        ...props.sx 
+      }}
+      {...props}
+    >
+      {prefix}{displayValue}{suffix}
+    </Typography>
+  );
+};
+
+// Special component for star rating with icon
+const StarRatingCounter = ({ rating = 5.0, duration = 2500 }) => {
+  const [displayRating, setDisplayRating] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
+          
+          let startTime;
+          const animate = (currentTime) => {
+            if (!startTime) startTime = currentTime;
+            const progress = Math.min((currentTime - startTime) / duration, 1);
+            
+            const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+            const currentRating = rating * easeOutCubic;
+            
+            setDisplayRating(currentRating);
+
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            } else {
+              setDisplayRating(rating);
+            }
+          };
+
+          requestAnimationFrame(animate);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, [rating, duration, hasAnimated]);
+
+  return (
+    <Box ref={ref} display="flex" alignItems="center" justifyContent="center" gap={0.5}>
+      <Typography variant="h4" fontWeight={800} sx={{ color: '#D4AF37' }}>
+        {displayRating.toFixed(1)}
+      </Typography>
+      <Star sx={{ color: '#D4AF37', fontSize: '2rem' }} />
+    </Box>
+  );
+};
 
 const PremiumGymPricing = () => {
   const [selectedPlan, setSelectedPlan] = useState('quarterly');
@@ -398,51 +526,132 @@ const PremiumGymPricing = () => {
                 ))}
               </Grid>
             </Grid>
-
-           
           </Grid>
 
-          {/* Trust Indicators */}
+          {/* Enhanced Animated Trust Indicators */}
           <Fade in={isVisible} timeout={1400}>
-            <Box mt={6} textAlign="center">
+            <Box mt={8} textAlign="center">
+              <Typography 
+                variant="h4" 
+                fontWeight={700} 
+                sx={{ 
+                  color: '#D4AF37', 
+                  mb: 4,
+                  textAlign: 'center'
+                }}
+              >
+                Trusted by Thousands
+              </Typography>
+              
               <Grid container spacing={4} justifyContent="center">
                 <Grid item xs={6} md={3}>
-                  <Box textAlign="center">
-                    <Typography variant="h4" fontWeight={800} sx={{ color: '#D4AF37' }}>
-                      500+
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                  <Box 
+                    textAlign="center"
+                    sx={{
+                      p: 3,
+                      borderRadius: '16px',
+                      background: 'rgba(212, 175, 55, 0.05)',
+                      border: '1px solid rgba(212, 175, 55, 0.1)',
+                      backdropFilter: 'blur(10px)',
+                      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                      '&:hover': {
+                        background: 'rgba(212, 175, 55, 0.1)',
+                        border: '1px solid rgba(212, 175, 55, 0.3)',
+                        transform: 'translateY(-8px)',
+                        boxShadow: '0 20px 40px rgba(212, 175, 55, 0.15)'
+                      }
+                    }}
+                  >
+                    <AnimatedCounter 
+                      end={500} 
+                      suffix="+"
+                      duration={2500}
+                    />
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1, fontWeight: 500 }}>
                       Active Members
                     </Typography>
                   </Box>
                 </Grid>
+                
                 <Grid item xs={6} md={3}>
-                  <Box textAlign="center">
-                    <Typography variant="h4" fontWeight={800} sx={{ color: '#D4AF37' }}>
-                      24/7
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Gym Access
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid item xs={6} md={3}>
-                  <Box textAlign="center">
-                    <Typography variant="h4" fontWeight={800} sx={{ color: '#D4AF37' }}>
-                      15+
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                  <Box 
+                    textAlign="center"
+                    sx={{
+                      p: 3,
+                      borderRadius: '16px',
+                      background: 'rgba(212, 175, 55, 0.05)',
+                      border: '1px solid rgba(212, 175, 55, 0.1)',
+                      backdropFilter: 'blur(10px)',
+                      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                      '&:hover': {
+                        background: 'rgba(212, 175, 55, 0.1)',
+                        border: '1px solid rgba(212, 175, 55, 0.3)',
+                        transform: 'translateY(-8px)',
+                        boxShadow: '0 20px 40px rgba(212, 175, 55, 0.15)'
+                      }
+                    }}
+                  >
+                    <AnimatedCounter 
+                      end={15} 
+                      suffix="+"
+                      duration={2000}
+                    />
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1, fontWeight: 500 }}>
                       Expert Trainers
                     </Typography>
                   </Box>
                 </Grid>
+                
                 <Grid item xs={6} md={3}>
-                  <Box textAlign="center">
-                    <Typography variant="h4" fontWeight={800} sx={{ color: '#D4AF37' }}>
-                      5★
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                  <Box 
+                    textAlign="center"
+                    sx={{
+                      p: 3,
+                      borderRadius: '16px',
+                      background: 'rgba(212, 175, 55, 0.05)',
+                      border: '1px solid rgba(212, 175, 55, 0.1)',
+                      backdropFilter: 'blur(10px)',
+                      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                      '&:hover': {
+                        background: 'rgba(212, 175, 55, 0.1)',
+                        border: '1px solid rgba(212, 175, 55, 0.3)',
+                        transform: 'translateY(-8px)',
+                        boxShadow: '0 20px 40px rgba(212, 175, 55, 0.15)'
+                      }
+                    }}
+                  >
+                    <StarRatingCounter rating={5.0} duration={2500} />
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1, fontWeight: 500 }}>
                       Google Rating
+                    </Typography>
+                  </Box>
+                </Grid>
+                
+                <Grid item xs={6} md={3}>
+                  <Box 
+                    textAlign="center"
+                    sx={{
+                      p: 3,
+                      borderRadius: '16px',
+                      background: 'rgba(212, 175, 55, 0.05)',
+                      border: '1px solid rgba(212, 175, 55, 0.1)',
+                      backdropFilter: 'blur(10px)',
+                      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                      '&:hover': {
+                        background: 'rgba(212, 175, 55, 0.1)',
+                        border: '1px solid rgba(212, 175, 55, 0.3)',
+                        transform: 'translateY(-8px)',
+                        boxShadow: '0 20px 40px rgba(212, 175, 55, 0.15)'
+                      }
+                    }}
+                  >
+                    <AnimatedCounter 
+                      end={1200} 
+                      suffix="+"
+                      duration={3000}
+                    />
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1, fontWeight: 500 }}>
+                      Success Stories
                     </Typography>
                   </Box>
                 </Grid>

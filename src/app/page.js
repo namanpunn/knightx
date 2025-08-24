@@ -8,6 +8,7 @@ import PricingComponent from "@/components/Prcing";
 import PremiumGymGallery from "@/components/gallery";
 import PremiumGymTestimonials from "@/components/testimonial";
 import PremiumGymFooter from "@/components/Footer";
+import InstructorSection from "@/components/Instructor";
 
 export default function Home() {
   return (
@@ -28,6 +29,9 @@ export default function Home() {
       </Box>
       <Box id="gallery">
         <PremiumGymGallery />
+      </Box>
+      <Box id="instructors">
+        <InstructorSection />
       </Box>
       <Box id="testimonial">
         <PremiumGymTestimonials />

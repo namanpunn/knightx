@@ -261,7 +261,7 @@ export default function Navbar() {
                   ml:'8px'
                 }}
               >
-                KnightX
+                KnightX Fitness
               </Typography>
             </LogoContainer>
             
