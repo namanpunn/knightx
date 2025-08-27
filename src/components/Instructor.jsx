@@ -22,7 +22,7 @@ import Image from 'next/image'; // ✅ Needed because you're using <Image>
 
 // Styled components matching KnightX theme
 const StyledSection = styled(Box)(({ theme }) => ({
-  background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+  background: 'linear-gradient(135deg, #1a1a1a 80%, #1a1919ff 20%)',
   padding: '60px 0',
   position: 'relative',
   overflow: 'hidden',
@@ -272,7 +272,7 @@ const defaultInstructors = [
     title: "Fitness Coach",
     image: "/images/ritik.jpg",
     experience: 3,
-    certificates: ["Trained Modern Fitness Methodologies", "Skilled in Exercise Science"],
+    certificates: ["Trained Modern Fitness Methodologies"],
     specialties: ["CrossFit", "Strength Training", "Military Training"],
     description: "Ritik is Dedicated fitness coach with 3 years’ experience in strength training; designs personalized programs, tracks progress, and motivates clients to achieve measurable results."
   }
