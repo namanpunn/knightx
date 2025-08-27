@@ -15,7 +15,7 @@ export const metadata = {
   title: "Knightx Fitness Gym",
   description: "Your ultimate fitness destination",
   icons: {
-    icon: "/images/logo.jpg",
+    icon: "/images/favicon.ico",
   },
 };
 

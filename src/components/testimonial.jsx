@@ -393,7 +393,7 @@ export default function PremiumGymTestimonials({
   return (
     <Wrap>
       <SectionHeader>
-        <Stack direction="row" alignItems="center" justifyContent="center" spacing={2} mb={1}>
+        <Stack direction="row" alignItems="center" justifyContent="center" spacing={2} mb={1} mt={3}>
           <EmojiEventsIcon sx={{ color: GOLD, fontSize: { xs: '2.2rem', md: '3rem' } }} />
           <Typography
             variant="h2"
@@ -403,7 +403,7 @@ export default function PremiumGymTestimonials({
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               letterSpacing: '-0.02em',
-              fontSize: { xs: '1.8rem', md: '3.2rem' }
+              fontSize: { xs: '1.8rem', md: '3.2rem' },
             }}
           >
             SUCCESS STORIES
