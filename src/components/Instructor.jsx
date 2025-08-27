@@ -1,4 +1,5 @@
-'use client'
+"use client";
+
 import React from 'react';
 import {
   Box,
@@ -17,6 +18,7 @@ import { styled } from '@mui/material/styles';
 import StarIcon from '@mui/icons-material/Star';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import Image from 'next/image'; // ✅ Needed because you're using <Image>
 
 // Styled components matching KnightX theme
 const StyledSection = styled(Box)(({ theme }) => ({
@@ -149,80 +151,34 @@ const InstructorSection = ({ instructors = defaultInstructors }) => {
         </Box>
 
         {/* Instructors Grid */}
-        <Grid container spacing={2}>
+        <Grid container spacing={1}>
           {instructors.map((instructor, index) => (
             <Grid item xs={12} md={6} lg={4} key={index}>
               <StyledCard>
-                <StyledCardMedia
-                  image={instructor.image}
-                  title={instructor.name}
-                />
-                
+                <Image src={instructor.image} alt={instructor.name} width={320} height={240} style={{objectFit:"cover"}} />
+
                 <CardContent sx={{ p: 2.5 }}>
-                  {/* Name and Title */}
-                  <Typography
-                    variant="h6"
-                    component="h3"
-                    sx={{
-                      color: '#fff',
-                      fontWeight: 'bold',
-                      mb: 0.5,
-                      fontSize: '1.1rem'
-                    }}
-                  >
+                  <Typography variant="h6" component="h3" sx={{ color: '#fff', fontWeight: 'bold', mb: 0.5, fontSize: '1.1rem' }}>
                     {instructor.name}
                   </Typography>
                   
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: '#ffc107',
-                      fontWeight: '500',
-                      mb: 1.5,
-                      fontSize: '0.85rem'
-                    }}
-                  >
+                  <Typography variant="body2" sx={{ color: '#ffc107', fontWeight: '500', mb: 1.5, fontSize: '0.85rem' }}>
                     {instructor.title}
                   </Typography>
 
                   {/* Experience */}
                   <ExperienceBox>
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        color: '#ffc107',
-                        fontWeight: 'bold',
-                        mb: 0.5,
-                        fontSize: '1.5rem'
-                      }}
-                    >
+                    <Typography variant="h5" sx={{ color: '#ffc107', fontWeight: 'bold', mb: 0.5, fontSize: '1.5rem' }}>
                       {instructor.experience}+
                     </Typography>
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        color: 'rgba(255, 255, 255, 0.7)',
-                        fontSize: '0.75rem'
-                      }}
-                    >
+                    <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.75rem' }}>
                       Years Experience
                     </Typography>
                   </ExperienceBox>
 
                   {/* Certificates */}
                   <Box mb={1.5}>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        color: '#fff',
-                        fontWeight: '600',
-                        mb: 0.5,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 0.5,
-                        fontSize: '0.85rem'
-                      }}
-                    >
+                    <Typography variant="body2" sx={{ color: '#fff', fontWeight: '600', mb: 0.5, display: 'flex', alignItems: 'center', gap: 0.5, fontSize: '0.85rem' }}>
                       <EmojiEventsIcon sx={{ color: '#ffc107', fontSize: '1rem' }} />
                       Certifications
                     </Typography>
@@ -245,36 +201,13 @@ const InstructorSection = ({ instructors = defaultInstructors }) => {
                   </Box>
 
                   {/* Description */}
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: 'rgba(255, 255, 255, 0.7)',
-                      lineHeight: 1.4,
-                      mb: 1.5,
-                      fontSize: '0.85rem',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden'
-                    }}
-                  >
+                  <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.4, mb: 1.5, fontSize: '0.85rem', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                     {instructor.description}
                   </Typography>
 
                   {/* Specialties */}
                   <Box mb={2}>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        color: '#fff',
-                        fontWeight: '600',
-                        mb: 0.5,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 0.5,
-                        fontSize: '0.85rem'
-                      }}
-                    >
+                    <Typography variant="body2" sx={{ color: '#fff', fontWeight: '600', mb: 0.5, display: 'flex', alignItems: 'center', gap: 0.5, fontSize: '0.85rem' }}>
                       <FitnessCenterIcon sx={{ color: '#ffc107', fontSize: '1rem' }} />
                       Specialties
                     </Typography>
@@ -295,35 +228,11 @@ const InstructorSection = ({ instructors = defaultInstructors }) => {
                       ))}
                     </Box>
                   </Box>
-
-                
                 </CardContent>
               </StyledCard>
             </Grid>
           ))}
         </Grid>
-
-        {/* Call to Action */}
-        {/* <Box textAlign="center" mt={5}>
-          <Button
-            variant="outlined"
-            sx={{
-              border: '1px solid #ffc107',
-              color: '#ffc107',
-              fontWeight: '600',
-              textTransform: 'none',
-              px: 3,
-              py: 1,
-              borderRadius: '6px',
-              '&:hover': {
-                background: 'rgba(255, 193, 7, 0.1)',
-                borderColor: '#ffc107',
-              }
-            }}
-          >
-            View All Trainers
-          </Button>
-        </Box> */}
       </Box>
     </StyledSection>
   );
@@ -334,7 +243,7 @@ const defaultInstructors = [
   {
     name: "Amit Thakral",
     title: "Elite Strength Coach",
-    image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    image: "/images/amit.jpg",
     experience: 7,
     certificates: ["K11 Certified PT", "ERAPS Certified (Dubai)"],
     specialties: ["Strength Training", "Body Transformation", "HIIT"],
@@ -343,7 +252,7 @@ const defaultInstructors = [
   {
     name: "Nupur Ummat",
     title: "Transformation Specialist",
-    image: "https://images.unsplash.com/photo-1594381898411-846e7d193883?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    image: "/images/girl.jpg",
     experience: 4,
     certificates: ["K11 Certified PT", "CPR & AED Certified"],
     specialties: ["Weight Loss", "Body Sculpting", "HIIT Training"],
@@ -352,16 +261,16 @@ const defaultInstructors = [
   {
     name: "Aman",
     title: "Judo & Martial Arts Expert",
-    image: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    image: "/images/aman.jpg",
     experience: 2,
     certificates: ["B.Ed Physical Education", "CPR & AED Certified"],
     specialties: ["CrossFit", "Martial Arts", "Military Training"],
     description: "Aman is a passionate fitness coach with 2 years of experience in strength training, martial arts, and self-defence."
   },
   {
-    name: "Aman",
+    name: "Ritik",
     title: "Judo & Martial Arts Expert",
-    image: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    image: "/images/ritik.jpg",
     experience: 2,
     certificates: ["B.Ed Physical Education", "CPR & AED Certified"],
     specialties: ["CrossFit", "Martial Arts", "Military Training"],

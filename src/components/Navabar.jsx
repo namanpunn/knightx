@@ -31,13 +31,13 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backdropFilter: 'blur(20px)',
   borderBottom: '1px solid rgba(255,255,255,0.08)',
   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-  
+
   '&.scrolled': {
     backgroundColor: alpha('#000', 0.95),
     borderBottom: `1px solid ${alpha('#FFD700', 0.2)}`,
     boxShadow: `0 8px 32px ${alpha('#000', 0.3)}`,
   },
-  
+
   '&.hidden': {
     transform: 'translateY(-100%)',
   }
@@ -45,8 +45,8 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   minHeight: '72px',
-  display:'flex',
-  justifyContent:'space-between',
+  display: 'flex',
+  justifyContent: 'space-between',
   [theme.breakpoints.up('md')]: {
     padding: theme.spacing(0, 6),
     minHeight: '80px',
@@ -74,11 +74,11 @@ const NavButton = styled(Button)(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.spacing(1),
   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-  
+
   '&.active::before': {
     width: '100%',
   },
-  
+
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -91,7 +91,7 @@ const NavButton = styled(Button)(({ theme }) => ({
     transition: 'width 0.3s ease',
     borderRadius: '2px 2px 0 0',
   },
-  
+
   '&::after': {
     content: '""',
     position: 'absolute',
@@ -104,7 +104,7 @@ const NavButton = styled(Button)(({ theme }) => ({
     opacity: 0,
     transition: 'opacity 0.3s ease',
   },
-  
+
   '&:hover': {
     backgroundColor: 'transparent',
     '&::before': {
@@ -125,7 +125,7 @@ const CTAButton = styled(Button)(({ theme }) => ({
   borderRadius: theme.spacing(3),
   boxShadow: `0 4px 16px ${alpha('#FFD700', 0.3)}`,
   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-  
+
   '&:hover': {
     background: 'linear-gradient(135deg, #FFA500 0%, #FFD700 100%)',
     boxShadow: `0 6px 24px ${alpha('#FFD700', 0.4)}`,
@@ -151,7 +151,7 @@ const MobileMenuItem = styled(MenuItem)(({ theme }) => ({
   margin: theme.spacing(0.5, 1),
   borderRadius: theme.spacing(1),
   transition: 'all 0.2s ease',
-  
+
   '&.selected': {
     backgroundColor: alpha('#FFD700', 0.1),
     borderLeft: `3px solid #FFD700`,
@@ -159,12 +159,12 @@ const MobileMenuItem = styled(MenuItem)(({ theme }) => ({
       fontWeight: 700,
     },
   },
-  
+
   '&:hover': {
     backgroundColor: alpha('#FFD700', 0.15),
     borderLeft: `3px solid #FFD700`,
   },
-  
+
   '& .MuiTypography-root': {
     color: '#fff',
     fontWeight: 600,
@@ -179,9 +179,9 @@ export default function Navbar() {
   const [scrolled, setScrolled] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
   const [lastScrollY, setLastScrollY] = React.useState(0);
-  
+
   const open = Boolean(anchorEl);
-  
+
   // Handle client-side mounting
   React.useEffect(() => {
     setMounted(true);
@@ -193,17 +193,17 @@ export default function Navbar() {
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
+
       // Update scrolled state
       setScrolled(currentScrollY > 50);
-      
+
       // Update hidden state (hide on scroll down, show on scroll up)
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
         setHidden(true);
       } else {
         setHidden(false);
       }
-      
+
       setLastScrollY(currentScrollY);
     };
 
@@ -251,20 +251,20 @@ export default function Navbar() {
               >
                 {/* Placeholder for logo */}
               </Box>
-              <Typography 
-                variant="h5" 
-                sx={{ 
-                  color: "#fff", 
+              <Typography
+                variant="h5"
+                sx={{
+                  color: "#fff",
                   fontWeight: 800,
                   fontSize: { xs: '1.5rem', md: '1.75rem' },
                   letterSpacing: '-0.02em',
-                  ml:'8px'
+                  ml: '8px'
                 }}
               >
                 KnightX Fitness
               </Typography>
             </LogoContainer>
-            
+
             <Box sx={{ display: { xs: "none", lg: "flex" }, gap: 1, alignItems: "center", ml: 'auto', mr: 4 }}>
               {navItems.map((href, i) => (
                 <NavButton key={href}>
@@ -272,13 +272,15 @@ export default function Navbar() {
                 </NavButton>
               ))}
             </Box>
-            
+
             <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}>
-              <CTAButton variant="contained">
+              <CTAButton variant="contained" onClick={() => {
+                window.open("https://wa.me/8802555888", "_blank");
+              }}>
                 Start Free Trial
               </CTAButton>
             </Box>
-            
+
             <Box sx={{ display: { xs: "flex", lg: "none" } }}>
               <IconButton sx={{ color: "#fff", width: 48, height: 48 }}>
                 <MenuIcon />
@@ -291,22 +293,22 @@ export default function Navbar() {
   }
 
   return (
-    <StyledAppBar 
-      position="fixed" 
-      elevation={0} 
+    <StyledAppBar
+      position="fixed"
+      elevation={0}
       className={`${scrolled ? 'scrolled' : ''} ${hidden ? 'hidden' : ''}`}
     >
       <Container maxWidth="xl">
         <StyledToolbar disableGutters>
-          
+
           {/* LOGO SECTION */}
           <LogoContainer onClick={handleLogoClick}>
-            <Image 
-              src="/images/logo.jpg" 
-              alt="Gym logo" 
-              height={50} 
-              width={50} 
-              style={{borderRadius: '50%'}}
+            <Image
+              src="/images/logo.jpg"
+              alt="Gym logo"
+              height={50}
+              width={50}
+              style={{ borderRadius: '50%' }}
               onError={(e) => {
                 e.target.style.display = 'none';
                 e.target.nextSibling.style.display = 'block';
@@ -325,25 +327,25 @@ export default function Navbar() {
             >
               <Typography sx={{ color: '#000', fontWeight: 'bold' }}>K</Typography>
             </Box>
-            <Typography 
-              variant="h5" 
-              sx={{ 
-                color: "#fff", 
+            <Typography
+              variant="h5"
+              sx={{
+                color: "#fff",
                 fontWeight: 800,
                 fontSize: { xs: '1.5rem', md: '1.75rem' },
                 letterSpacing: '-0.02em',
-                ml:'8px'
+                ml: '8px'
               }}
             >
-              KnightX
+              KnightX Fitness
             </Typography>
           </LogoContainer>
 
           {/* DESKTOP NAVIGATION */}
-          <Box 
-            sx={{ 
-              display: { xs: "none", lg: "flex" }, 
-              gap: 1, 
+          <Box
+            sx={{
+              display: { xs: "none", lg: "flex" },
+              gap: 1,
               alignItems: "center",
               ml: 'auto',
               mr: 4,
@@ -366,17 +368,19 @@ export default function Navbar() {
 
           {/* DESKTOP CTA */}
           <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}>
-            <CTAButton variant="contained">
+            <CTAButton variant="contained" onClick={() => {
+              window.open("https://wa.me/8802555888", "_blank");
+            }}>
               Start Free Trial
             </CTAButton>
           </Box>
 
           {/* MOBILE MENU BUTTON */}
           <Box sx={{ display: { xs: "flex", lg: "none" } }}>
-            <IconButton 
-              onClick={handleMenuOpen} 
-              aria-label="open menu" 
-              sx={{ 
+            <IconButton
+              onClick={handleMenuOpen}
+              aria-label="open menu"
+              sx={{
                 color: "#fff",
                 width: 48,
                 height: 48,
@@ -401,10 +405,10 @@ export default function Navbar() {
           >
             {/* Close Button */}
             <Box sx={{ px: 2, py: 1, display: "flex", justifyContent: "flex-end" }}>
-              <IconButton 
-                size="small" 
+              <IconButton
+                size="small"
                 onClick={handleMenuClose}
-                sx={{ 
+                sx={{
                   color: '#fff',
                   '&:hover': {
                     backgroundColor: alpha('#FFD700', 0.1),
@@ -433,8 +437,8 @@ export default function Navbar() {
 
             {/* Mobile CTA */}
             <Box sx={{ p: 2, pt: 1 }}>
-              <CTAButton 
-                fullWidth 
+              <CTAButton
+                fullWidth
                 onClick={handleMenuClose}
                 sx={{ py: 1.5 }}
               >

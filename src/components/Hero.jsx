@@ -127,7 +127,7 @@ const PrimaryCTA = styled(Button)(({ theme }) => ({
   position: 'relative',
   overflow: 'hidden',
   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-  
+
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -138,7 +138,7 @@ const PrimaryCTA = styled(Button)(({ theme }) => ({
     background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
     transition: 'left 0.6s ease',
   },
-  
+
   '&:hover': {
     transform: 'translateY(-2px)',
     boxShadow: `0 12px 40px ${alpha('#FFD700', 0.5)}`,
@@ -159,7 +159,7 @@ const SecondaryCTA = styled(Button)(({ theme }) => ({
   backdropFilter: 'blur(10px)',
   backgroundColor: alpha('#000', 0.2),
   transition: 'all 0.3s ease',
-  
+
   '&:hover': {
     borderColor: '#FFD700',
     backgroundColor: alpha('#FFD700', 0.1),
@@ -175,13 +175,13 @@ const PlayButton = styled(IconButton)(({ theme }) => ({
   border: `2px solid ${alpha('#FFD700', 0.3)}`,
   color: '#FFD700',
   transition: 'all 0.3s ease',
-  
+
   '&:hover': {
     backgroundColor: alpha('#FFD700', 0.3),
     borderColor: '#FFD700',
     transform: 'scale(1.1)',
   },
-  
+
   '& .MuiSvgIcon-root': {
     fontSize: 32,
     marginLeft: theme.spacing(0.5), // Center the play icon better
@@ -196,7 +196,7 @@ const StatsCard = styled(Box)(({ theme }) => ({
   border: `1px solid ${alpha('#FFD700', 0.1)}`,
   textAlign: 'center',
   transition: 'all 0.3s ease',
-  
+
   '&:hover': {
     transform: 'translateY(-4px)',
     borderColor: alpha('#FFD700', 0.3),
@@ -243,7 +243,7 @@ export default function Hero() {
   useEffect(() => {
     setIsVisible(true);
   }, []);
-const isMobile = useMediaQuery('(max-width:600px)');
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   return (
     <HeroSection>
@@ -273,11 +273,11 @@ const isMobile = useMediaQuery('(max-width:600px)');
       </FloatingElement>
 
       <ContentContainer maxWidth="xl">
-        <Grid container spacing={6} alignItems="center" sx={{display:'flex', flexDirection: { xs: 'column', md: 'row' }, gap: {xs:32,md:0}}}>
+        <Grid container spacing={6} alignItems="center" sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: { xs: 32, md: 0 } }}>
           {/* Left Content */}
-          <Grid item xs={12} lg={6} sx={{mt:'-100px'}}>
+          <Grid item xs={12} lg={6} sx={{ mt: '-100px' }}>
             <Box sx={{ color: '#fff' }}>
-              
+
               {/* Badge */}
               <Chip
                 label="🏆 #1 Fitness Center in Gurgaon"
@@ -287,7 +287,7 @@ const isMobile = useMediaQuery('(max-width:600px)');
                   fontWeight: 600,
                   border: `1px solid ${alpha('#FFD700', 0.3)}`,
                   mb: 3,
-                  mt:{ xs: 8, md: 0 }
+                  mt: { xs: 8, md: 0 }
                 }}
               />
 
@@ -303,20 +303,25 @@ const isMobile = useMediaQuery('(max-width:600px)');
 
               {/* Subtitle */}
               <SubText>
-                Join the ultimate fitness journey with state-of-the-art equipment, 
-                expert trainers, and a community that pushes you to achieve greatness. 
+                Join the ultimate fitness journey with state-of-the-art equipment,
+                expert trainers, and a community that pushes you to achieve greatness.
                 Your transformation starts here.
               </SubText>
 
               {/* CTA Buttons */}
-              <Box sx={{ 
-                display: 'flex', 
-                gap: 3, 
+              <Box sx={{
+                display: 'flex',
+                gap: 3,
                 alignItems: 'center',
                 flexWrap: { xs: 'wrap', sm: 'nowrap' },
                 mb: 5,
               }}>
-                <PrimaryCTA size="large">
+                <PrimaryCTA
+                  size="large"
+                  onClick={() => {
+                    window.open("https://wa.me/8802555888", "_blank");
+                  }}
+                >
                   Start Your Journey
                 </PrimaryCTA>
 
@@ -334,22 +339,22 @@ const isMobile = useMediaQuery('(max-width:600px)');
                 </Box> */}
               </Box>
 
-            
-             
+
+
             </Box>
           </Grid>
 
           {/* Right Image Section */}
           <Grid item xs={12} lg={6}>
             <ImageContainer>
-              
+
               {/* Gradient Panel */}
               <GradientPanel />
 
               {/* Hero Image */}
-              <Box sx={{ 
-                position: 'relative', 
-                zIndex: 2, 
+              <Box sx={{
+                position: 'relative',
+                zIndex: 2,
                 height: '100%',
                 display: 'flex',
                 alignItems: 'center',
@@ -359,12 +364,12 @@ const isMobile = useMediaQuery('(max-width:600px)');
                 <Box
                   sx={{
                     position: 'absolute',
-                    top:{xs:'-295px ',md:"-370px",xl:"-450px"},
-                    left: { xs: '-220px', md:'-360px',xl:'-300px' },
+                    top: { xs: '-295px ', md: "-370px", xl: "-450px" },
+                    left: { xs: '-220px', md: '-360px', xl: '-300px' },
                     width: { xs: '70%', md: '65%' },
                     height: '90%',
                     filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.3))',
-                    
+
                   }}
                 >
                   <Image
@@ -378,7 +383,7 @@ const isMobile = useMediaQuery('(max-width:600px)');
                 </Box>
               </Box>
 
-           
+
 
             </ImageContainer>
           </Grid>
@@ -386,10 +391,10 @@ const isMobile = useMediaQuery('(max-width:600px)');
       </ContentContainer>
 
       {/* Enhanced Bottom Wave */}
-      <Box sx={{ position: 'absolute',  bottom: -5, zIndex: 2,width: '1200px' , left:0}}>
-        <svg 
-          viewBox="0 0 1440 120" 
-          xmlns="http://www.w3.org/2000/svg" 
+      <Box sx={{ position: 'absolute', bottom: -5, zIndex: 2, width: '1200px', left: 0 }}>
+        <svg
+          viewBox="0 0 1440 120"
+          xmlns="http://www.w3.org/2000/svg"
           style={{ display: 'block', width: '100%', height: 100 }}
         >
           <defs>
@@ -399,23 +404,23 @@ const isMobile = useMediaQuery('(max-width:600px)');
               <stop offset="100%" stopColor="#FF8C00" />
             </linearGradient>
           </defs>
-          <path 
-            d="M0 60 C 360 160 1080 -40 1440 60 L1440 120 L0 120 Z" 
-            fill="url(#waveGradient)" 
+          <path
+            d="M0 60 C 360 160 1080 -40 1440 60 L1440 120 L0 120 Z"
+            fill="url(#waveGradient)"
             opacity="0.8"
           />
-          <path 
-            d="M0 80 C 480 180 960 -20 1440 80 L1440 120 L0 120 Z" 
-            fill="url(#waveGradient)" 
+          <path
+            d="M0 80 C 480 180 960 -20 1440 80 L1440 120 L0 120 Z"
+            fill="url(#waveGradient)"
             opacity="0.4"
           />
         </svg>
       </Box>
 
       {/* Background Overlay */}
-      <Box 
-        sx={{ 
-          position: 'absolute', 
+      <Box
+        sx={{
+          position: 'absolute',
           inset: 0,
           background: `
             radial-gradient(circle at 20% 80%, ${alpha('#FFD700', 0.1)} 0%, transparent 50%),
@@ -423,7 +428,7 @@ const isMobile = useMediaQuery('(max-width:600px)');
             linear-gradient(135deg, transparent 0%, ${alpha('#000', 0.2)} 100%)
           `,
           zIndex: 1,
-        }} 
+        }}
       />
     </HeroSection>
   );
