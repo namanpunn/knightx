@@ -269,12 +269,12 @@ const defaultInstructors = [
   },
   {
     name: "Ritik",
-    title: "Judo & Martial Arts Expert",
+    title: "Fitness Coach",
     image: "/images/ritik.jpg",
-    experience: 2,
-    certificates: ["B.Ed Physical Education", "CPR & AED Certified"],
-    specialties: ["CrossFit", "Martial Arts", "Military Training"],
-    description: "Aman is a passionate fitness coach with 2 years of experience in strength training, martial arts, and self-defence."
+    experience: 3,
+    certificates: ["Trained Modern Fitness Methodologies", "Skilled in Exercise Science"],
+    specialties: ["CrossFit", "Strength Training", "Military Training"],
+    description: "Ritik is Dedicated fitness coach with 3 years’ experience in strength training; designs personalized programs, tracks progress, and motivates clients to achieve measurable results."
   }
 ];
 
