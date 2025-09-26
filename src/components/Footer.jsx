@@ -51,7 +51,7 @@ export default function PremiumGymFooter({ logoSrc = '/images/logo.jpg' }) {
             <Image src={logoSrc} alt="Gym logo" width={80} height={80}/>
           </Box>
           <Box>
-            <Typography variant="h6" sx={{ fontWeight: 800 }}>Titan Fitness</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 800 }}>KnightX Fitness</Typography>
             <Typography variant="body2" sx={{ color: '#bdbdbd', maxWidth: 420 }}>Elite facility, world-class equipment, and coaching built for results. Join a community that trains like champions.</Typography>
             <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
               {/* <IconButton aria-label="facebook" component="a" href="#" sx={{ bgcolor: 'rgba(255,255,255,0.02)' }}>
@@ -88,8 +88,8 @@ export default function PremiumGymFooter({ logoSrc = '/images/logo.jpg' }) {
 
           <Col>
             <Typography sx={{ fontWeight: 800 }}>Contact</Typography>
-            <Typography variant="body2" sx={{ color: '#bfbfbf' }}>Email: hello@titanfitness.com</Typography>
-            <Typography variant="body2" sx={{ color: '#bfbfbf' }}>Phone: +91 98765 43210</Typography>
+            <Typography variant="body2" sx={{ color: '#bfbfbf' }}>Email: knightxfitness.@gmail.com</Typography>
+            <Typography variant="body2" sx={{ color: '#bfbfbf' }}>Phone: +91 8802555888/8802555444</Typography>
             <Typography variant="body2" sx={{ color: '#bfbfbf' }}>Address: House No. 1412, Sector 46, Gurgaon</Typography>
           </Col>
 
@@ -100,11 +100,11 @@ export default function PremiumGymFooter({ logoSrc = '/images/logo.jpg' }) {
       <Divider sx={{ my: 4, borderColor: 'rgba(255,255,255,0.04)' }} />
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2, flexDirection: { xs: 'column', md: 'row' } }}>
-        <Typography variant="caption" sx={{ color: '#bdbdbd' }}>&copy; {new Date().getFullYear()} Titan Fitness. All rights reserved.</Typography>
+        <Typography variant="caption" sx={{ color: '#bdbdbd' }}>&copy; {new Date().getFullYear()} KnightX Fitness. All rights reserved.</Typography>
 
         <Stack direction="row" spacing={2} alignItems="center">
-          <Link href="#" legacyBehavior><a style={{ color: '#bdbdbd' }}>Terms</a></Link>
-          <Link href="#" legacyBehavior><a style={{ color: '#bdbdbd' }}>Sitemap</a></Link>
+          {/* <Link href="#" legacyBehavior><a style={{ color: '#bdbdbd' }}>Terms</a></Link> */}
+          <Link href="https://www.google.com/maps?sca_esv=c4554e91040c2cd7&output=search&q=knightx+fitness&source=lnms&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIeuYzzFkfneXafNx6OMdA4MT_ii3zzsda10XPDTrLfEePPtJVDojrBPt1F6jq_pROBFbgs0UpU0f-Zb8Xc2nDliNzB6_2oEWyx9tW2RB1spXdehuof3IWeec-Q7JzOyDop53fT7o3q3JtMgZ5zCCorJrBkI54u1AJCaVLWhJY0fGZQZ13AA&entry=mc&ved=1t:200715&ictx=111" legacyBehavior ><a style={{ color: '#bdbdbd' }}   target="_blank">Get Gym Location on Map</a></Link>
         </Stack>
       </Box>
     </FooterRoot>
